@@ -18,14 +18,4 @@ npm run build
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-### Just to Test
 
-awe howzit chinas
-
-### testing 1 2 3
-
-### yes yes poes
-
-## lekker shutup
-
-## git add * 
