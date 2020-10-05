@@ -124,3 +124,10 @@ totCov = betas*betas_t*(mktVol**2) + S**2 #Total_Covariance_Matrix
 pfVol = weights_t*betas*betas_t*weights*(mktVol**2) + weights_t*(S**2)*weights # Portfolio_Variance
 
 CorrMat = D_inverse*(betas*betas_t*mktVol**2 + S**2)*D_inverse #Correlation_Matrix
+
+
+
+
+
+
+
