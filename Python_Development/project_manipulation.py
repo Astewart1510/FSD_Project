@@ -16,12 +16,13 @@ indexCode = "RESI"
 mktIndexCode = "J203" # Enter Market code for CAPM model
 
 #### read files
-Industry_Classification_Benchmark = pd.read_csv("/Users/myhome/Documents/work/UCT 2020/Course Work/Semester 2/Financial Systems design/Project/Industry_Classification_Benchmark.csv")
-Index_Constituents = pd.read_csv("/Users/myhome/Documents/work/UCT 2020/Course Work/Semester 2/Financial Systems design/Project/Index_Constituents.csv")
-FTSEJSE_Index_Series = pd.read_csv("/Users/myhome/Documents/work/UCT 2020/Course Work/Semester 2/Financial Systems design/Project/FTSEJSE_Index_Series.csv")
-EOD_Interest_Rate_Data = pd.read_csv("/Users/myhome/Documents/work/UCT 2020/Course Work/Semester 2/Financial Systems design/Project/EOD_Interest_Rate_Data.csv")
-EOD_Equity_Data = pd.read_csv("/Users/myhome/Documents/work/UCT 2020/Course Work/Semester 2/Financial Systems design/Project/EOD_Equity_Data.csv")
-BA_Beta_Output = pd.read_csv("/Users/myhome/Documents/work/UCT 2020/Course Work/Semester 2/Financial Systems design/Project/BA_Beta_Output.csv")
+Industry_Classification_Benchmark = pd.read_csv("../csv_files/Industry_Classification_Benchmark.csv")
+Index_Constituents = pd.read_csv("../csv_files/Index_Constituents.csv")
+BA_Beta_Output = pd.read_csv("../csv_files/BA_Beta_Output.csv")
+#FTSEJSE_Index_Series = pd.read_csv("../csv_files/FTSEJSE_Index_Series.csv")
+#EOD_Interest_Rate_Data = pd.read_csv("../csv_files/EOD_Interest_Rate_Data.csv")
+#EOD_Equity_Data = pd.read_csv("../csv_files/EOD_Equity_Data.csv")
+
 
 #### convert Date column to datetime format
 Index_Constituents.Date = pd.to_datetime(Index_Constituents.Date)
@@ -47,7 +48,9 @@ def GetICsAndWeights(rdate,indexCode):
     return weights
 
 #store weights and ICs in separate lists
-weights = GetICsAndWeights(rdate, indexCode)    
+weights = GetICsAndWeights(rdate, indexCode)
+IC_weights = {'IC': ICs, 'Weight': weights}
+IC_weights = pd.DataFrame(IC_weights)
 
 #### Second Function
 ##Initialise and create lists to store data 
@@ -59,6 +62,7 @@ mktVol = []
 specVols = []
 
 #define function
+
 def GetBetasMktAndSpecVols(mktIndexCode,rdate,ICs):
     for i in range(len(BA_Beta_Output)): # loop through ever row of table
         for j in ICs: # loop through every constituent of the ICs
@@ -69,9 +73,54 @@ def GetBetasMktAndSpecVols(mktIndexCode,rdate,ICs):
                 F2_Instruments.append(BA_Beta_Output["Instrument"][i])
                 F2_Index.append(BA_Beta_Output["Index"][i])
                 specVols.append(BA_Beta_Output["Unique Risk"][i])
-                mktVol.append(BA_Beta_Output["Total Risk"][i])
-    return 
+                #mktVol.append(BA_Beta_Output["Total Risk"][i])
+    #for i in range(len(BA_Beta_Output)):       
+        if BA_Beta_Output["Date"][i].month == rdate.month and BA_Beta_Output["Date"][i].year == rdate.year and BA_Beta_Output["Instrument"][i] == mktIndexCode:
+            mktVol = BA_Beta_Output["Total Risk"][i]            
+    return mktVol
 
-GetBetasMktAndSpecVols(mktIndexCode,rdate,ICs)
+mktVol = GetBetasMktAndSpecVols(mktIndexCode,rdate,ICs)
 
 ### Third Function
+
+# set weights
+#weights_np_array = np.array([0.05, 0.15, 0.4, 0.134, 0.189, 0.003, 0.074]) given from previous function
+weights_t = np.transpose(weights)
+
+# set betas
+#betas = np.array([1.05, 0.75, 0.84, 0.9134, 1.189, 1.003, 0.574]) given from previous function
+betas_t = np.transpose(betas)
+
+# specific volatility
+#specVols = np.array([0.05, 0.15, 0.4, 0.134, 0.189, 0.003, 0.074]) given from previous function
+specVols_t = np.transpose(specVols)
+
+# create S: a diagonal matrix with specVols as entries
+S = np.diag(specVols)
+
+# create D: a diagonal matrix of total asset volatilities
+D = np.diag(betas)
+D_inverse = np.linalg.inv(D)
+
+# market volatility
+#mktVol = np.array([1.1])
+mktVol = np.array(mktVol) #change mktvol to a numpy array
+
+# Variance <=> Total Volatility
+# Calculations
+
+pfBeta = weights_t*betas #Portfolio_Beta
+
+sysCov = betas*betas_t*(mktVol**2) #Systematic_Covariance_Matrix
+
+pfSysVol = weights_t*betas*betas_t*weights*(mktVol**2) #Portfolio_Systematic_Variance
+
+specCov = S**2 #Specific_Covariance_Matrix
+
+pfSpecVol = weights_t*(S**2)*weights #Portfolio_Specific_Variance
+
+totCov = betas*betas_t*(mktVol**2) + S**2 #Total_Covariance_Matrix
+
+pfVol = weights_t*betas*betas_t*weights*(mktVol**2) + weights_t*(S**2)*weights # Portfolio_Variance
+
+CorrMat = D_inverse*(betas*betas_t*mktVol**2 + S**2)*D_inverse #Correlation_Matrix
