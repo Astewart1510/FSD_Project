@@ -48,7 +48,10 @@ def GetICsAndWeights(rdate,indexCode):
     return weights
 
 #store weights and ICs in separate lists
+
 weights = GetICsAndWeights(rdate, indexCode)
+#sum(weights) = 1
+   
 IC_weights = {'IC': ICs, 'Weight': weights}
 IC_weights = pd.DataFrame(IC_weights)
 
@@ -124,10 +127,4 @@ totCov = betas*betas_t*(mktVol**2) + S**2 #Total_Covariance_Matrix
 pfVol = weights_t*betas*betas_t*weights*(mktVol**2) + weights_t*(S**2)*weights # Portfolio_Variance
 
 CorrMat = D_inverse*(betas*betas_t*mktVol**2 + S**2)*D_inverse #Correlation_Matrix
-
-
-
-
-
-
 
