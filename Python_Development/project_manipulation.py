@@ -134,6 +134,38 @@ pfVol = weights_t*betas*betas_t*weights*(mktVol**2) + weights_t*(S**2)*weights #
 
 CorrMat = D_inverse*(betas*betas_t*mktVol**2 + S**2)*D_inverse #Correlation_Matrix
 
-####
+#### create table for demo
+rdate = "2020-Q2" #only for DEMO!!!!!
+SpecVar = [ pfSpecVol[i][i] for i in range(len(pfSpecVol)) ] # only for DEMO!!
+
+demo_table = {'Date': rdate,'Instrument': ICs, 'Weight': weights,'Beta': pfBeta, 'SysVol': pfSysVol, 'SpecVar': SpecVar} 
+#'SpecVar': pfSpecVol}
+demo_table = pd.DataFrame(demo_table)
+
+demo_table.to_csv('Demo_table.csv', index = True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
