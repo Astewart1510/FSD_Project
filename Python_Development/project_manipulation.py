@@ -32,15 +32,20 @@ BA_Beta_Output.Date = pd.to_datetime(BA_Beta_Output.Date)
 ##intialise
 #store ICs
 ICs = []
+ICB_subsector = []
+indexCode_column = indexCode + " New"
 #define function
+
 def GetICsAndWeights(rdate,indexCode):
     indexCode_column = indexCode + " New"
     Gross_market = []
+    
     
     for i in range(len(Index_Constituents)):
         if (Index_Constituents.loc[i,"Date"] == rdate and Index_Constituents.loc[i,indexCode_column] == indexCode):  #and Index_Constituents.loc[i,"ALSI New"] == "ALSI New"):
             ICs.append(Index_Constituents.loc[i, "Alpha"])
             Gross_market.append(Index_Constituents.loc[i, "Gross Market Capitalisation"])
+            ICB_subsector.append(Index_Constituents.loc[i, "ICB Sub-Sector"])
 
     total = np.sum(Gross_market)
     weights = Gross_market/total
@@ -48,12 +53,13 @@ def GetICsAndWeights(rdate,indexCode):
     return weights
 
 #store weights and ICs in separate lists
-
 weights = GetICsAndWeights(rdate, indexCode)
 #sum(weights) = 1
+## loop through function 1 and get all possible solutions
+
    
-IC_weights = {'IC': ICs, 'Weight': weights}
-IC_weights = pd.DataFrame(IC_weights)
+IC_weights_subsector = {'IC': ICs, 'Weight': weights,'ICB Sub_sector': ICB_subsector}
+IC_weights_subsector = pd.DataFrame(IC_weights_subsector)
 
 #### Second Function
 ##Initialise and create lists to store data 
@@ -127,4 +133,7 @@ totCov = betas*betas_t*(mktVol**2) + S**2 #Total_Covariance_Matrix
 pfVol = weights_t*betas*betas_t*weights*(mktVol**2) + weights_t*(S**2)*weights # Portfolio_Variance
 
 CorrMat = D_inverse*(betas*betas_t*mktVol**2 + S**2)*D_inverse #Correlation_Matrix
+
+####
+
 
