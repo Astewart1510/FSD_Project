@@ -12,7 +12,7 @@ import datetime as datetime
 
 #### Specificy the indexCode, date and MktIndexCode
 rdate = datetime.datetime(2020,6,22) #enter date here
-indexCode = "RESI"
+indexCode = "TOPI"
 mktIndexCode = "J203" # Enter Market code for CAPM model
 
 #### read files
