@@ -37,10 +37,14 @@ indexCode_column = indexCode + " New"
 #define function
 
 def GetICsAndWeights(rdate,indexCode):
-    indexCode_column = indexCode + " New"
+    if indexCode == 'FLED':
+        indexCode_column = 'ALSI New'      
+    elif indexCode == 'LRGC' or indexCode == 'MIDC' or indexCode == 'SMLC':
+        indexCode_column = 'Index New'
+    else:
+        indexCode_column = indexCode + " New"
+        
     Gross_market = []
-    
-    
     for i in range(len(Index_Constituents)):
         if (Index_Constituents.loc[i,"Date"] == rdate and Index_Constituents.loc[i,indexCode_column] == indexCode):  #and Index_Constituents.loc[i,"ALSI New"] == "ALSI New"):
             ICs.append(Index_Constituents.loc[i, "Alpha"])
@@ -119,6 +123,7 @@ mktVol = np.array(mktVol) #change mktvol to a numpy array
 # Calculations
 
 pfBeta = weights_t*betas #Portfolio_Beta
+pfBeta_2 = weights_t.dot(betas)
 
 sysCov = betas*betas_t*(mktVol**2) #Systematic_Covariance_Matrix
 
@@ -152,10 +157,6 @@ demo_table = pd.DataFrame(demo_table)
 
 demo_table.to_csv('Demo_table.csv', index = True)
             
-            
-        
-
-
 
 
 
