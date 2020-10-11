@@ -2,7 +2,7 @@
   <div class="home">
     <img alt="Page header" src="../assets/uct.jpg">
     <FinancialDash/>
-    <img alt="Page footer" src="../assets/test.png" height="300px" width="1000px">
+
   </div>
 </template>
 
