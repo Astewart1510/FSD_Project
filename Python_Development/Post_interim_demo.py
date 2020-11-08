@@ -199,8 +199,8 @@ Date_IC_weights_subsector = Date_IC_weights_subsector.merge(Industry_Classificat
 
 #Get weights of industry for each date for each indice
 Index_Date_Idustry_Weight = Date_IC_weights_subsector.groupby(["Index Code","Date","Industry"], as_index = False)["Weight"].sum()
-#PERFROM CHECK 
-#Date_IC_weights_subsector[(Date_IC_weights_subsector['Date'] == datetime.datetime(2017,9,18)) & (Date_IC_weights_subsector['Index Code'] == 'ALSI') & (Date_IC_weights_subsector['Industry'] == 'Basic Materials')]['Weight'].sum()
+#PERFROM Unit Test
+Date_IC_weights_subsector[(Date_IC_weights_subsector['Date'] == datetime.datetime(2017,9,18)) & (Date_IC_weights_subsector['Index Code'] == 'ALSI')]['Weight'].sum()
 ######## END FUNCTION 1 ######## 
 
 ######## DEFINE FUNCTION 2 ######## 
