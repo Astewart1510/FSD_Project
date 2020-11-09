@@ -1,52 +1,9 @@
 <template>
   <div class="main">
-    <h1>AIFMRM - Equity Risk Service (ERS)</h1>
-      <div class="row">
-      <div class="col-md-3">
-      </div>
-      <div class="col-md-3">
-      <b-form-select v-model="selectedJSE" :options="JSEoptions" size="sm" class="mt-3" v-on:change="myProvider"></b-form-select>
-      <div class="mt-3">Selected: <strong>{{ selectedJSE }}</strong></div>
-      </div>
-      <div class="col-md-3">
-      <b-form-select v-model="selectedIndex" :options="IndexOptions" size="sm" class="mt-3" v-on:change="getSelectedItem"></b-form-select>
-      <div class="mt-3">Selected: <strong>{{ selectedIndex }}</strong></div>
-      </div>
-      <!-- Have to update page only after both options have been selected -->
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">Headline</h1>
+
     </div>
-
-    <div class="mb-3"></div>
-
-    <div class="div" v-if="selectedJSE !== null"> 
-      <div>
-        <b-table sticky-header striped bordered fixed outlined ref="table" :items="myProvider" :fields="fields" head-variant ="light" ></b-table>
-      </div>
-    
-      <div class="div" v-if="selectedJSE !== null & selectedIndex !== null"> 
-        <div class="row">
-          <div class="col-md-4">
-          </div>
-          <div class="col-md-4">
-            <b-form-select v-model="selectedPlot" :options="PlotOptions" size="sm" class="mt-3"  v-on:change="getSelectedItem"></b-form-select>
-            <div class="mt-3">Selected: <strong>{{ selectedPlot }}</strong></div>
-          </div>
-        </div> 
-      </div>
-
-      <div class="div" v-if="selectedJSE !== null & selectedIndex !== null & selectedPlot !== null"> 
-        <div id='myDiv'></div> 
-      </div> 
-
-      <div class="mb-3"></div>
-      <!-- <button onClick="window.location.reload();">Reset Page</button> -->
-    </div> 
-
-    <div class="div" v-if="selectedJSE !== null | selectedIndex !== null | selectedPlot !== null"> 
-     <button style="height:100px;width:100px" onClick="window.location.reload();"  class="btn btn-white btn btn-round btn-just-icon">
-            <i class="material-icons ml-1" style="font-size: 4em;">refresh</i>Reset
-      </button>
-    </div> 
-
   </div>
 </template>
 
@@ -78,7 +35,7 @@ export default {
         // handled by table itself
         // this.isBusy = true
         var JSEwebsite = ''
-        
+
         if (this.selectedJSE == "J200") {
           JSEwebsite = 'http://financials.azurewebsites.net/api/J200/FetchAll'
         } else if (this.selectedJSE == "J203") {
@@ -150,18 +107,18 @@ export default {
       //     this.pfBeta.push(this.yi.pfBeta)
       //     this.pfSysVol.push(this.yi.pfSysVol)
       //   }
-        
+
       // })
       // .catch(err => console.log(err))
 
         //console.log(this.Weight[0])
 
         if (this.selectedPlot == null) {
-          
+
         } else {
 
         var x = 0
-        
+
         if (this.selectedIndex == "ALSI") {
           x = 0
         } else if (this.selectedIndex == "ALTI") {
@@ -186,7 +143,7 @@ export default {
           x = 1200
         } else if (this.selectedIndex == "TOPI") {
           x = 1320
-        } 
+        }
 
         var trace1 = {
           x: ['2017-Q3', '2017-Q4', '2018-Q1','2018-Q2', '2018-Q3', '2018-Q4','2019-Q1', '2019-Q2', '2019-Q3','2019-Q4', '2020-Q1', '2020-Q2'],
@@ -497,7 +454,7 @@ export default {
           Plotly.newPlot('myDiv', data_3,layout);
         } else if (this.selectedPlot == 'Specvar') {
           Plotly.newPlot('myDiv', data_4,layout);
-        } 
+        }
 
         }
     },
@@ -506,7 +463,7 @@ export default {
 
   },
 
-  
+
 
   data() {
       return {
@@ -566,15 +523,15 @@ export default {
         ],
 
         fields: ['Index_Code', 'Year_Month', 'Industry','Weight','pfBeta','pfSysVol', 'pfSpecVar'],
-        
+
       }
 
-      
+
     },
 
 
-    
-  
+
+
 }
 
 

@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <img alt="Page header" src="../assets/uct.jpg">
+
     <FinancialDash/>
 
   </div>
@@ -15,6 +15,7 @@ export default {
   name: 'Home',
   components: {
     FinancialDash
+
   }
 }
 </script>
