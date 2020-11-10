@@ -569,8 +569,214 @@ awe = J258_Index_Year_Month_Industry_Weight_Beta['Year_Month'].drop_duplicates()
 awe = J258_Index_Year_Month_Industry_Weight_Beta['Year_Month'].drop_duplicates()
 
 
-
 Full_demo.to_csv('Full_demo_updated_SpevVol.csv', index = True)
+
+
+######create table for betas and search by share
+
+BA_Beta_Output_Final = BA_Beta_Output
+BA_Beta_Output_Final['Year_Month'] = BA_Beta_Output_Final['Date'].dt.to_period('M')
+BA_Beta_Output_Final= BA_Beta_Output_Final[['Instrument',"Start Date","End Date",'% Days Traded','Data Points','Index','Year_Month','Beta']]
+
+J200_Beta_table  = BA_Beta_Output_Final[BA_Beta_Output_Final['Index'] == 'J200']
+J203_Beta_table  = BA_Beta_Output_Final[BA_Beta_Output_Final['Index'] == 'J203']
+J250_Beta_table  = BA_Beta_Output_Final[BA_Beta_Output_Final['Index'] == 'J250']
+J257_Beta_table  = BA_Beta_Output_Final[BA_Beta_Output_Final['Index'] == 'J257']
+J258_Beta_table  = BA_Beta_Output_Final[BA_Beta_Output_Final['Index'] == 'J258']
+
+#change column name to Beta(J200), Beta(J203), etc
+J200_Beta_table = J200_Beta_table.rename(columns={'Beta': 'Beta(J200)'})
+J203_Beta_table = J203_Beta_table.rename(columns={'Beta': 'Beta(J203)'})
+J250_Beta_table = J250_Beta_table.rename(columns={'Beta': 'Beta(J250)'})
+J257_Beta_table = J257_Beta_table.rename(columns={'Beta': 'Beta(J257)'})
+J258_Beta_table = J258_Beta_table.rename(columns={'Beta': 'Beta(J258)'})
+
+#Merge all the shares betas together
+Full_Beta_table = J203_Beta_table.merge(J200_Beta_table, left_on=['Instrument','Year_Month','Start Date','End Date', '% Days Traded','Data Points'], right_on=['Instrument','Year_Month','Start Date','End Date', '% Days Traded','Data Points'], how = 'left')
+Full_Beta_table = Full_Beta_table.merge(J250_Beta_table, left_on=['Instrument','Year_Month','Start Date','End Date', '% Days Traded','Data Points'], right_on=['Instrument','Year_Month','Start Date','End Date', '% Days Traded','Data Points'], how = 'left')
+Full_Beta_table = Full_Beta_table.merge(J257_Beta_table, left_on=['Instrument','Year_Month','Start Date','End Date', '% Days Traded','Data Points'], right_on=['Instrument','Year_Month','Start Date','End Date', '% Days Traded','Data Points'], how = 'left')
+Full_Beta_table = Full_Beta_table.merge(J258_Beta_table, left_on=['Instrument','Year_Month','Start Date','End Date', '% Days Traded','Data Points'], right_on=['Instrument','Year_Month','Start Date','End Date', '% Days Traded','Data Points'], how = 'left')
+
+#drop columns
+Full_Beta_table = Full_Beta_table.drop(columns = ["Index_x","Index_y", "Index"])
+#remove Beta NAs
+Full_Beta_table = Full_Beta_table.dropna(subset=['Beta(J203)', 'Beta(J200)', 'Beta(J250)', 'Beta(J257)', 'Beta(J258)'])
+
+#input industry
+#grab ICB_Sub sector codes from index constituents
+Index_Constituents['Year_Month'] = Index_Constituents['Date'].dt.to_period('M')
+sub_sector_index_constituents = Index_Constituents[['Year_Month','Alpha', 'ICB Sub-Sector']]
+sub_sector_index_constituents = sub_sector_index_constituents.rename(columns = {'Alpha': 'Instrument'})
+
+#merge the two frames together to get the ICB_Subsector codes on different dates
+test_Full_Beta_table = Full_Beta_table.merge(sub_sector_index_constituents, left_on = ["Year_Month","Instrument"],right_on=['Year_Month','Instrument'], how = "left")
+#add in ICB codes for shares with Nan manually 
+test_Full_Beta_table.loc[911,'ICB Sub-Sector'] = 2797
+test_Full_Beta_table.loc[570,'ICB Sub-Sector'] = 1757
+test_Full_Beta_table.loc[618,'ICB Sub-Sector'] = 5371
+test_Full_Beta_table.loc[625,'ICB Sub-Sector'] = 8633
+test_Full_Beta_table.loc[750,'ICB Sub-Sector'] = 8995
+test_Full_Beta_table.loc[800,'ICB Sub-Sector'] = 3573
+test_Full_Beta_table.loc[843,'ICB Sub-Sector'] = 537
+
+
+
+#now get the industries from the ICB Sub-Sector Codes
+Industry_subSector = Industry_Classification_Benchmark[['Industry','Sub-Sector Code']]
+
+#now merge the two frames to get industry
+test_Full_Beta_table = test_Full_Beta_table.merge(Industry_subSector, left_on = ["ICB Sub-Sector"], right_on = ["Sub-Sector Code"], how = "left")
+
+# remove the redundant columns
+test_Full_Beta_table = test_Full_Beta_table.drop(columns = ["ICB Sub-Sector","Sub-Sector Code"])
+
+#separate indices from shares into two different data sets
+Shares_Beta_data = test_Full_Beta_table[test_Full_Beta_table['Industry'].notnull()]
+Indice_Beta_data = test_Full_Beta_table[test_Full_Beta_table['Industry'].isnull()]
+
+#remove Industry Column from Indice Beta Data
+Indice_Beta_data = Indice_Beta_data.drop(columns = ["Industry"])
+Indice_Beta_data = Indice_Beta_data.drop(columns = ["Start Date", "End Date", "% Days Traded"])
+
+###replace the date values with Quarter values 
+#change year_month to string format
+Indice_Beta_data['Year_Month'] = Indice_Beta_data['Year_Month'].astype(str)
+
+Indice_Beta_data.Year_Month.replace({'2017-09':'2017-Q3',
+                                                               '2017-12':'2017-Q4',
+                                                               '2018-03':'2018-Q1',
+                                                               '2018-06':'2018-Q2',
+                                                               '2018-09':'2018-Q3',
+                                                               '2018-12':'2018-Q4',
+                                                               '2019-03':'2019-Q1',
+                                                               '2019-06':'2019-Q2',
+                                                               '2019-09':'2019-Q3',
+                                                               '2019-12':'2019-Q4',
+                                                               '2020-03':'2020-Q1',
+                                                               '2020-06':'2020-Q2'}, inplace=True)
+
+Shares_Beta_data['Year_Month'] = Shares_Beta_data['Year_Month'].astype(str)
+
+Shares_Beta_data.Year_Month.replace({'2017-09':'2017-Q3',
+                                                               '2017-12':'2017-Q4',
+                                                               '2018-03':'2018-Q1',
+                                                               '2018-06':'2018-Q2',
+                                                               '2018-09':'2018-Q3',
+                                                               '2018-12':'2018-Q4',
+                                                               '2019-03':'2019-Q1',
+                                                               '2019-06':'2019-Q2',
+                                                               '2019-09':'2019-Q3',
+                                                               '2019-12':'2019-Q4',
+                                                               '2020-03':'2020-Q1',
+                                                               '2020-06':'2020-Q2'}, inplace=True)
+
+
+# add names to indice share beta table    
+
+Indice_names = {'Indice'    : ['J259','J200','J201','','','','','','','','','','','','','','','','','','','','',''],
+                'Name'      : ['Dividend Plus','Top 40','Mid Cap','','','','','','','','','','','','','','','','','','','','',''],
+                'Series'    : ['Dividend Forecast Index Series','','','','','','','','','','','','','','','','','','','','','','','']
+                } 
+# loaded in names by myself, therefore you must load the saved data instance to view it   
+Indice_names_data = pd.DataFrame(Indice_names, columns = ['Indice', 'Name','Series'])
+
+blank = pd.Series(['','',''], index = ['Indice', 'Name','Series'])
+Indice_names_data = Indice_names_data.append(blank, ignore_index = True)
+
+Indice_Beta_data_test = Indice_Beta_data.merge(Indice_names_data, left_on = ["Instrument"], right_on = ["Indice"], how = "left")
+Indice_Beta_data_test.fillna('', inplace=True)
+
+Indice_Beta_data = Indice_Beta_data_test
+#remove indice column
+Indice_Beta_data = Indice_Beta_data.drop(columns = ["Indice"])
+
+#rearrange columns
+cols = ['Instrument','Name','Year_Month','Series','Data Points','Beta(J203)','Beta(J200)','Beta(J250)','Beta(J257)','Beta(J258)']
+
+Indice_Beta_data = Indice_Beta_data[cols]
+
+#save each file into csv
+Indice_Beta_data.to_csv('Indice_Beta_Data.csv', index = True)
+Shares_Beta_data.to_csv('Shares_Beta_Data.csv', index = True)
+
+
+
+
+#J259 Dividend Plus Dividend Forecast Index Series
+#J200 Top 40 Headline Index
+#J201 Mid Cap Headline Index
+#J202 Small Cap Headline Index
+#J203 All Share Headline Index
+#J204 Fledgling Headline Index
+#J205 Large Cap Headline Index
+#J300 Capped Top Headline Index Variants Index Series
+#J303 Capped All Share Headline Index Variants Index Series
+#JN23 All Share Net TRI Headline Index Variants Index Series
+#J500 Oil & Gas ICB Industry Index Series
+#J510 Basic Materials ICB Industry Index Series
+#J520 Industrials ICB Industry Index Series
+#J530 Consumer Goods ICB Industry Index Series
+#J540 Health Care ICB Industry Index Series
+#J550 Consumer Services ICB Industry Index Series
+#J560 Telecommunication ICB Industry Index Series
+#J580 Financials ICB Industry Index Series
+#J590 Technology ICB Industry Index Series
+#J055 Oil & Gas Producers ICB Sector Index Series
+#J135 Chemicals ICB Sector Index Series
+#J173 Forestry & Paper ICB Sector Index Series
+#J175 Industrial Metals & Mining ICB Sector Index Series
+#J177 Mining ICB Sector Index Series
+#J235 Construction & Materials ICB Sector Index Series
+#J272 General Industrials ICB Sector Index Series
+#J273 Electronic & Electrical Equipment ICB Sector Index Series
+#J275 Industrial Engineering ICB Sector Index Series
+##J277 Industrial Transportation ICB Sector Index Series
+#J279 Support Services ICB Sector Index Series
+#J335 Automobiles & Parts ICB Sector Index Series
+#J353 Beverages ICB Sector Index Series
+#J357 Food Producers ICB Sector Index Series
+#J372 Household Goods & Home Construction ICB Sector Index Series
+#J376 Personal Goods ICB Sector Index Series
+#J378 Tobacco ICB Sector Index Series
+#J453 Health Care Equipment & Services ICB Sector Index Series
+#J457 Pharmaceuticals & Biotechnology ICB Sector Index Series
+#J533 Food & Drug Retailers ICB Sector Index Series
+#J537 General Retailers ICB Sector Index Series
+#J555 Media ICB Sector Index Series
+#J575 Travel & Leisure ICB Sector Index Series
+#J653 Fixed Line Telecommunications ICB Sector Index Series
+#J657 Mobile Telecommunications ICB Sector Index Series
+#J835 Banks ICB Sector Index Series
+#J853 Non-life Insurance ICB Sector Index Series
+#J857 Life Insurance ICB Sector Index Series
+#J863 Real Estate Investment & Services ICB Sector Index Series
+#J867 Real Estate Investment Trusts ICB Sector Index Series
+#J877 General Financial ICB Sector Index Series
+#J898 Equity Investment Instruments ICB Sector Index Series
+#J953 Software & Computer Services ICB Sector Index Series
+#150 Gold Mining ICB Sub-Sector Index Series
+#J151 Coal Mining ICB Sub-Sector Index Series
+#J153 Platinum & Precious Metals ICB Sub-Sector Index Series
+#J154 General Mining ICB Sub-Sector Index Series
+#JNR4 RAFI 40 Net TRI RAFI Index Series
+#J230 Development Capital Secondary Market Index Series
+#J231 Venture Capital Secondary Market Index Series
+#J232 Alternative Exchange Secondary Market Index Series
+#233 Alternative Exchange Secondary Market Index Series
+#J400 SWIX Top 40 Shareholder Weighted (SWIX) Index Series
+#J403 SWIX All Share Shareholder Weighted (SWIX) Index Series
+#JN43 SWIX All Share Net TRI Shareholder Weighted (SWIX) Index Series
+#J141 Capped Shariah Top 40 Shariah Index Series
+#250 Financials and Industrials Specialist Indices Index Series
+#257 Industrials Specialist Indices Index Series
+#J258 Resources Specialist Indices Index Series
+#J253 SA Listed Property Specialist Property Index Series
+#254 Capped Property Specialist Property Index Series
+#255 Property Unit Trust Specialist Property Index Series
+#J#330 Value Style (Value and Growth) Index Series
+#J#331 Growth Style (Value and Growth) Index Series
+#
+
 
 
 
