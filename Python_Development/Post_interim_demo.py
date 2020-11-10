@@ -695,6 +695,14 @@ cols = ['Instrument','Name','Year_Month','Series','Data Points','Beta(J203)','Be
 
 Indice_Beta_data = Indice_Beta_data[cols]
 
+#change format of Shares Beta Data start and end Date columns
+Shares_Beta_data['Start Date'] = pd.to_datetime(Shares_Beta_data['Start Date'])
+Shares_Beta_data['Start Date'] = Shares_Beta_data['Start Date'].dt.to_period('D')
+
+Shares_Beta_data['End Date'] = pd.to_datetime(Shares_Beta_data['End Date'])
+Shares_Beta_data['End Date'] = Shares_Beta_data['End Date'].dt.to_period('D')
+
+
 #save each file into csv
 Indice_Beta_data.to_csv('Indice_Beta_Data.csv', index = True)
 Shares_Beta_data.to_csv('Shares_Beta_Data.csv', index = True)
