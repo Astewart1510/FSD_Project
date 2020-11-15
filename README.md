@@ -1,19 +1,34 @@
-# financials
+# Welcome to the Financial Systems Design Project
+**Group Members**
 
-## Project setup
-```
-npm install
-```
+* Alex Stewart
+* Bingle Kruger
+* Charl Everts
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+# Installation
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Setup
+
+1. Clone this repository
+
+2. Move into this `financials` subfolder:
+
+	```bash
+	cd financials
+	```
+
+3. Install package dependencies:
+
+	```bash
+	npm install
+	```
+ 
+4. Run dashboard:
+
+	```bash
+	npm run serve
+	```
+
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
