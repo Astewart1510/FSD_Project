@@ -1,0 +1,74 @@
+,Instrument,Name,Series,Δ J203,%Δ J203,Δ J200,%Δ J200,Δ J250,%Δ J250,Δ J257,%Δ J257,Δ J258,%Δ J258
+0,J055,Oil & Gas Producers,ICB Sector Index Series,-0.3639,-42.76,-0.3346,-41.43,-0.3347,-36.68,-0.252,-35.68,-0.0274,-22.37
+1,J135,Chemicals,ICB Sector Index Series,0.5647,30.92,0.5416,33.70,0.4241,26.70,0.2854,28.53,0.3115,36.07
+2,J141,Capped Shariah Top 40,Shariah Index Series,0.1353,12.66,0.1406,14.39,0.1476,16.08,0.1414,19.73,0.0923,16.20
+3,J150,Gold Mining,ICB Sub-Sector Index Series,0.1644,19.13,0.1595,20.98,0.1046,14.58,0.11,17.64,0.1237,16.46
+4,J151,Coal Mining,ICB Sub-Sector Index Series,-0.0443,-4.50,-0.043,-5.15,-0.0673,-8.17,-0.0414,-6.81,-0.017,-1.99
+5,J153,Platinum & Precious Metals,ICB Sub-Sector Index Series,0.2299,18.33,0.2144,20.21,0.1678,16.42,0.112,15.09,0.0927,8.83
+6,J154,General Mining,ICB Sub-Sector Index Series,-0.0379,-3.18,-0.019,-1.74,-0.0231,-2.69,0.001,0.14,-0.0794,-7.19
+7,J173,Forestry & Paper,ICB Sector Index Series,-0.0375,-4.80,-0.0294,-3.75,-0.0123,-1.61,0.0011,0.16,0.0189,6.87
+8,J175,Industrial Metals & Mining,ICB Sector Index Series,0.033,3.25,0.0285,3.24,-0.0258,-3.00,-0.0059,-0.88,0.031,2.89
+9,J177,Mining,ICB Sector Index Series,0.0669,5.63,0.081,7.65,0.0634,7.58,0.0682,10.15,-0.0218,-1.95
+10,J200,Top 40,Headline Index,0.0017,0.17,0.0,0.00,0.0375,3.70,0.0427,4.75,0.0428,11.69
+11,J201,Mid Cap,Headline Index,-0.0597,-6.17,-0.0364,-4.49,-0.0102,-1.12,0.0108,1.92,-0.0072,-1.63
+12,J202,Small Cap,Headline Index,0.0294,3.77,0.0402,6.06,0.0667,8.66,0.0782,16.34,0.0312,9.73
+13,J203,All Share,Headline Index,0.0,0.00,0.003,0.31,0.0375,3.83,0.0475,5.75,0.0379,10.17
+14,J204,Fledgling,Headline Index,-0.061,-13.54,-0.0497,-13.37,-0.0349,-7.95,-0.0116,-4.82,-0.0179,-9.17
+15,J205,Large Cap,Headline Index,0.0153,1.54,0.0114,1.16,0.0584,5.87,0.0686,7.74,0.0362,7.03
+16,J230,Development Capital,Secondary Market Index Series,-0.2071,-73.26,-0.2012,-84.29,-0.213,-56.16,-0.1804,-57.22,-0.0364,109.97
+17,J231,Venture Capital,Secondary Market Index Series,-0.2783,-39.37,-0.2373,-34.73,-0.2865,-39.35,-0.1435,-22.15,-0.0173,-9.39
+18,J232,Alternative Exchange,Secondary Market Index Series,-0.0938,-63.77,-0.0917,-65.88,-0.106,-71.14,-0.0838,-70.36,-0.0161,-112.59
+19,J233,Alternative Exchange,Secondary Market Index Series,-0.1539,-33.53,-0.1461,-32.83,-0.1635,-34.23,-0.1212,-32.34,-0.024,-23.46
+20,J235,Construction & Materials,ICB Sector Index Series,-0.0283,-3.71,-0.0184,-2.80,0.0149,1.95,0.0231,4.17,0.0004,0.12
+21,J250,Financials and Industrials,Specialist Indices Index Series,-0.0302,-3.32,-0.0286,-3.26,0.0,0.00,0.0138,1.62,0.032,13.78
+22,J253,SA Listed Property,Specialist Property Index Series,-0.0273,-2.62,-0.0108,-1.21,0.0283,2.64,0.0442,6.92,0.023,6.73
+23,J254,Capped Property,Specialist Property Index Series,-0.0304,-2.85,-0.0146,-1.57,0.0278,2.56,0.0446,6.79,0.023,6.69
+24,J255,Property Unit Trust,Specialist Property Index Series,0.0081,-476.47,0.0079,-564.29,0.0089,-684.62,0.0094,-2350.00,0.0057,-407.14
+25,J257,Industrials,Specialist Indices Index Series,-0.015,-1.74,-0.021,-2.41,0.0142,1.49,0.0,0.00,0.0377,18.12
+26,J258,Resources,Specialist Indices Index Series,0.0673,5.43,0.0826,7.35,0.0892,9.91,0.0892,12.37,0.0,0.00
+27,J259,Dividend Plus,Dividend Forecast Index Series,-0.0247,-2.53,-0.0048,-0.57,-0.0017,-0.18,0.0212,3.65,0.0241,5.33
+28,J272,General Industrials,ICB Sector Index Series,-0.1166,-12.44,-0.0968,-11.86,-0.0894,-8.41,-0.0513,-7.47,0.008,3.73
+29,J273,Electronic & Electrical Equipment,ICB Sector Index Series,-0.2758,-38.55,-0.2504,-40.41,-0.2484,-36.36,-0.2005,-47.73,-0.0891,-28.63
+30,J275,Industrial Engineering,ICB Sector Index Series,-0.0844,-9.57,-0.0792,-10.65,-0.0413,-4.55,-0.0528,-9.47,-0.0058,-1.91
+31,J277,Industrial Transportation,ICB Sector Index Series,-0.0015,-0.13,0.0195,2.02,0.0097,0.87,0.0194,2.87,0.0527,10.95
+32,J279,Support Services,ICB Sector Index Series,0.029,6.34,0.0273,7.18,0.0402,7.39,0.0466,15.06,0.0721,97.70
+33,J300,Capped Top,Headline Index Variants Index Series,0.0021,0.21,0.0039,0.40,0.0356,3.63,0.0464,5.68,0.042,11.16
+34,J303,Capped All,Headline Index Variants Index Series,-0.0013,-0.13,0.0036,0.39,0.0345,3.60,0.0473,6.08,0.0372,9.90
+35,J330,Value,Style (Value and Growth) Index Series,-0.063,-5.71,-0.0452,-4.57,-0.0049,-0.49,0.02,2.78,-0.0054,-1.01
+36,J331,Growth,Style (Value and Growth) Index Series,0.0483,5.32,0.0435,4.82,0.0701,7.36,0.0627,6.92,0.0671,25.52
+37,J335,Automobiles & Parts,ICB Sector Index Series,0.0693,7.67,0.0682,8.58,0.1228,13.19,0.1038,16.36,0.0478,13.58
+38,J353,Beverages,ICB Sector Index Series,-0.0783,-9.49,-0.0654,-8.08,-0.0338,-3.52,-0.0096,-1.11,0.0297,69.72
+39,J357,Food Producers,ICB Sector Index Series,-0.057,-9.61,-0.0496,-9.22,-0.0143,-2.26,0.002,0.36,-0.0069,-3.57
+40,J372,Household Goods & Home Construction,ICB Sector Index Series,-0.0252,-2.59,-0.0064,-0.71,0.0288,2.86,0.0375,4.56,0.0258,8.86
+41,J376,Personal Goods,ICB Sector Index Series,-0.0738,-6.86,-0.0653,-6.08,-0.0116,-1.20,0.0146,1.54,-0.0268,-5.51
+42,J378,Tobacco,ICB Sector Index Series,0.0156,2.29,0.0225,3.25,0.014,1.99,0.0323,4.19,0.0719,49.25
+43,J400,SWIX Top 40,Shareholder Weighted (SWIX) Index Series,0.0107,1.06,0.0109,1.12,0.0376,3.52,0.049,5.39,0.0548,17.88
+44,J403,SWIX All Share,Shareholder Weighted (SWIX) Index Series,0.0045,0.46,0.0096,1.04,0.0358,3.51,0.0515,6.26,0.0457,14.08
+45,J453,Health Care Equipment & Services,ICB Sector Index Series,-0.1906,-21.45,-0.1713,-21.20,-0.1475,-15.46,-0.1064,-14.49,-0.0413,-16.64
+46,J457,Pharmaceuticals & Biotechnology,ICB Sector Index Series,0.1363,13.21,0.1422,14.97,0.1148,10.86,0.0981,11.61,0.1469,41.76
+47,J500,Oil & Gas,ICB Industry Index Series,-0.3073,-36.23,-0.2874,-36.32,-0.323,-37.72,-0.2142,-31.08,0.0159,4.68
+48,J510,Basic Materials,ICB Industry Index Series,0.0601,4.81,0.075,6.60,0.089,9.72,0.0894,12.14,0.0094,1.00
+49,J520,Industrials,ICB Industry Index Series,-0.1044,-11.24,-0.0834,-10.41,-0.078,-7.67,-0.0426,-6.65,0.0071,2.73
+50,J530,Consumer Goods,ICB Industry Index Series,-0.026,-2.98,-0.0251,-2.80,0.0132,1.52,0.0178,1.87,0.0251,9.62
+51,J533,Food & Drug Retailers,ICB Sector Index Series,-0.1711,-26.50,-0.1612,-27.32,-0.1357,-19.26,-0.1038,-18.15,-0.0424,-22.84
+52,J537,General Retailers,ICB Sector Index Series,0.0659,5.99,0.0696,7.00,0.1237,10.83,0.0732,9.07,0.0668,20.92
+53,J540,Health Care,ICB Industry Index Series,-0.0559,-5.75,-0.0418,-4.68,-0.038,-3.69,-0.0153,-1.86,0.036,12.38
+54,J550,Consumer Services,ICB Industry Index Series,-0.1511,-12.98,-0.147,-12.94,-0.0931,-7.17,-0.0622,-5.51,-0.0114,-4.15
+55,J555,Media,ICB Sector Index Series,-0.0509,-3.97,-0.0565,-4.33,0.0377,2.77,0.0353,2.55,0.0172,5.05
+56,J560,Telecommunication,ICB Industry Index Series,-0.1682,-21.77,-0.1571,-23.30,-0.157,-19.30,-0.1198,-21.48,-0.0221,-8.30
+57,J575,Travel & Leisure,ICB Sector Index Series,0.1859,18.54,0.1848,21.76,0.2514,24.55,0.2118,36.54,0.097,28.68
+58,J580,Financials,ICB Industry Index Series,-0.064,-6.37,-0.0452,-5.16,-0.0212,-1.99,0.0082,1.35,0.0154,5.14
+59,J590,Technology,ICB Industry Index Series,0.0874,18.77,0.0859,19.20,0.0789,15.16,0.0906,17.41,0.0922,68.45
+60,J653,Fixed Line Telecommunications,ICB Sector Index Series,0.1332,14.20,0.1302,15.18,0.1985,20.74,0.182,25.61,0.0671,20.22
+61,J657,Mobile Telecommunications,ICB Sector Index Series,-0.1791,-23.38,-0.1678,-25.17,-0.1707,-21.14,-0.1323,-23.90,-0.024,-9.10
+62,J835,Banks,ICB Sector Index Series,-0.03,-2.65,-0.0174,-1.70,0.0361,3.13,0.0072,0.91,0.0059,1.53
+63,J853,Non-life Insurance,ICB Sector Index Series,-0.1435,-32.38,-0.1323,-34.35,-0.1325,-27.11,-0.0963,-24.95,-0.0284,-19.63
+64,J857,Life Insurance,ICB Sector Index Series,0.0137,1.37,0.0288,3.27,0.0546,5.09,0.0659,10.31,0.0487,17.88
+65,J863,Real Estate Investment & Services,ICB Sector Index Series,-0.059,-5.55,-0.0458,-4.64,-0.0241,-2.24,-0.0006,-0.08,0.025,7.77
+66,J867,Real Estate Investment Trusts,ICB Sector Index Series,-0.0221,-2.16,-0.0069,-0.78,0.0392,3.74,0.0528,8.64,0.022,6.59
+67,J877,General Financial,ICB Sector Index Series,-0.0453,-4.23,-0.0348,-3.53,-0.0077,-0.69,0.0172,2.24,0.0314,9.82
+68,J898,Equity Investment Instruments,ICB Sector Index Series,-0.262,-36.03,-0.2442,-35.00,-0.2223,-30.22,-0.1766,-25.78,-0.0858,-35.50
+69,J953,Software & Computer Services,ICB Sector Index Series,0.0873,18.75,0.0859,19.20,0.0789,15.16,0.0906,17.41,0.0922,68.45
+70,JN23,All Share Net TRI,Headline Index Variants Index Series,0.0,0.00,0.003,0.31,0.0375,3.83,0.0475,5.75,0.0379,10.17
+71,JN43,SWIX All Share Net TRI,Shareholder Weighted (SWIX) Index Series,0.0045,0.46,0.0096,1.04,0.0358,3.51,0.0515,6.26,0.0457,14.08
+72,JNR4,RAFI 40 Net TRI,RAFI Index Series,-0.1447,-32.61,-0.1355,-33.19,-0.1196,-31.73,-0.0984,-30.56,-0.0644,-22.86

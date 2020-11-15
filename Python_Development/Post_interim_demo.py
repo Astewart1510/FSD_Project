@@ -572,7 +572,7 @@ awe = J258_Index_Year_Month_Industry_Weight_Beta['Year_Month'].drop_duplicates()
 Full_demo.to_csv('Full_demo_updated_SpevVol.csv', index = True)
 
 
-######create table for betas and search by share
+######  Create tables of betas for Shares and for Market Indices #######
 
 BA_Beta_Output_Final = BA_Beta_Output
 BA_Beta_Output_Final['Year_Month'] = BA_Beta_Output_Final['Date'].dt.to_period('M')
@@ -618,7 +618,6 @@ test_Full_Beta_table.loc[625,'ICB Sub-Sector'] = 8633
 test_Full_Beta_table.loc[750,'ICB Sub-Sector'] = 8995
 test_Full_Beta_table.loc[800,'ICB Sub-Sector'] = 3573
 test_Full_Beta_table.loc[843,'ICB Sub-Sector'] = 537
-
 
 
 #now get the industries from the ICB Sub-Sector Codes
@@ -708,82 +707,75 @@ Indice_Beta_data.to_csv('Indice_Beta_Data.csv', index = True)
 Shares_Beta_data.to_csv('Shares_Beta_Data.csv', index = True)
 
 
+####### Create table for Landing Page - the greatest chnage in betas from 2020 Q1 - 2020 Q2 ########
+
+#import the shares and indices tables for only the 2020 Q1/Q2 dates
+# Make sure your directory is the "Project" folder
+Landing_Indice = pd.read_csv("FSD_Project/csv_files/Landing_page_Indice_Beta.csv")
+Landing_Shares = pd.read_csv("FSD_Project/csv_files/Landing_page_Shares_Betas.csv")
+
+## calculate difference between the two for Indice table
+create function
+def change_Indice(Beta):
+    value = 'Beta_' + Beta
+    name_1 = 'Δ ' + Beta
+    name_2 = '%Δ ' + Beta
+    df_tes = (Landing_Indice.pivot_table(index=['Instrument','Name','Series'], columns='Year_Month',values=value))
+    df_tes[name_1]= df_tes['2020-Q2'].sub(df_tes['2020-Q1']).round(4)
+    df_tes[name_2] = (df_tes['2020-Q2'] - df_tes['2020-Q1'])/df_tes['2020-Q1'] * 100
+    df_tes[name_2] = df_tes[name_2].map(lambda n: '{:.2f}'.format(n))
+    df_tes = df_tes.reset_index().rename_axis(None, axis=1)
+    df_tes = df_tes.drop(columns = ['2020-Q2','2020-Q1'])
+    return df_tes
+    
+    
+change_J203 = change_Indice('J203')
+change_J200 = change_Indice('J200')
+change_J250 = change_Indice('J250')
+change_J257 = change_Indice('J257')
+change_J258 = change_Indice('J258')
+
+Landing_Indice_Change = change_J203.merge(change_J200, left_on=['Instrument','Name','Series'], right_on=['Instrument','Name','Series'], how = 'left')
+Landing_Indice_Change = Landing_Indice_Change.merge(change_J250, left_on=['Instrument','Name','Series'], right_on=['Instrument','Name','Series'], how = 'left')
+Landing_Indice_Change = Landing_Indice_Change.merge(change_J257, left_on=['Instrument','Name','Series'], right_on=['Instrument','Name','Series'], how = 'left')
+Landing_Indice_Change = Landing_Indice_Change.merge(change_J258, left_on=['Instrument','Name','Series'], right_on=['Instrument','Name','Series'], how = 'left')
+
+Landing_Indice_Change.to_csv('Landing_Page_Indices.csv', index = True)
+
+## calculate difference between the two for Indice table
+#create function
+def change_Shares(Beta):
+    value = 'Beta_' + Beta
+    name_1 = 'Δ ' + Beta
+    name_2 = '%Δ ' + Beta
+    df_tes = (Landing_Shares.pivot_table(index=['Instrument','Industry'], columns='Year_Month',values=value))
+    df_tes[name_1]= df_tes['2020-Q2'].sub(df_tes['2020-Q1']).round(4)
+    df_tes[name_2] = (df_tes['2020-Q2'] - df_tes['2020-Q1'])/df_tes['2020-Q1'] * 100
+    df_tes[name_2] = df_tes[name_2].map(lambda n: '{:.2f}'.format(n))
+    df_tes = df_tes.reset_index().rename_axis(None, axis=1)
+    df_tes = df_tes.dropna()
+    df_tes = df_tes[df_tes['2020-Q1'] != 0]
+    df_tes = df_tes[df_tes['2020-Q2'] != 0]
+    df_tes = df_tes.drop(columns = ['2020-Q2','2020-Q1'])
+    return df_tes
 
 
-#J259 Dividend Plus Dividend Forecast Index Series
-#J200 Top 40 Headline Index
-#J201 Mid Cap Headline Index
-#J202 Small Cap Headline Index
-#J203 All Share Headline Index
-#J204 Fledgling Headline Index
-#J205 Large Cap Headline Index
-#J300 Capped Top Headline Index Variants Index Series
-#J303 Capped All Share Headline Index Variants Index Series
-#JN23 All Share Net TRI Headline Index Variants Index Series
-#J500 Oil & Gas ICB Industry Index Series
-#J510 Basic Materials ICB Industry Index Series
-#J520 Industrials ICB Industry Index Series
-#J530 Consumer Goods ICB Industry Index Series
-#J540 Health Care ICB Industry Index Series
-#J550 Consumer Services ICB Industry Index Series
-#J560 Telecommunication ICB Industry Index Series
-#J580 Financials ICB Industry Index Series
-#J590 Technology ICB Industry Index Series
-#J055 Oil & Gas Producers ICB Sector Index Series
-#J135 Chemicals ICB Sector Index Series
-#J173 Forestry & Paper ICB Sector Index Series
-#J175 Industrial Metals & Mining ICB Sector Index Series
-#J177 Mining ICB Sector Index Series
-#J235 Construction & Materials ICB Sector Index Series
-#J272 General Industrials ICB Sector Index Series
-#J273 Electronic & Electrical Equipment ICB Sector Index Series
-#J275 Industrial Engineering ICB Sector Index Series
-##J277 Industrial Transportation ICB Sector Index Series
-#J279 Support Services ICB Sector Index Series
-#J335 Automobiles & Parts ICB Sector Index Series
-#J353 Beverages ICB Sector Index Series
-#J357 Food Producers ICB Sector Index Series
-#J372 Household Goods & Home Construction ICB Sector Index Series
-#J376 Personal Goods ICB Sector Index Series
-#J378 Tobacco ICB Sector Index Series
-#J453 Health Care Equipment & Services ICB Sector Index Series
-#J457 Pharmaceuticals & Biotechnology ICB Sector Index Series
-#J533 Food & Drug Retailers ICB Sector Index Series
-#J537 General Retailers ICB Sector Index Series
-#J555 Media ICB Sector Index Series
-#J575 Travel & Leisure ICB Sector Index Series
-#J653 Fixed Line Telecommunications ICB Sector Index Series
-#J657 Mobile Telecommunications ICB Sector Index Series
-#J835 Banks ICB Sector Index Series
-#J853 Non-life Insurance ICB Sector Index Series
-#J857 Life Insurance ICB Sector Index Series
-#J863 Real Estate Investment & Services ICB Sector Index Series
-#J867 Real Estate Investment Trusts ICB Sector Index Series
-#J877 General Financial ICB Sector Index Series
-#J898 Equity Investment Instruments ICB Sector Index Series
-#J953 Software & Computer Services ICB Sector Index Series
-#150 Gold Mining ICB Sub-Sector Index Series
-#J151 Coal Mining ICB Sub-Sector Index Series
-#J153 Platinum & Precious Metals ICB Sub-Sector Index Series
-#J154 General Mining ICB Sub-Sector Index Series
-#JNR4 RAFI 40 Net TRI RAFI Index Series
-#J230 Development Capital Secondary Market Index Series
-#J231 Venture Capital Secondary Market Index Series
-#J232 Alternative Exchange Secondary Market Index Series
-#233 Alternative Exchange Secondary Market Index Series
-#J400 SWIX Top 40 Shareholder Weighted (SWIX) Index Series
-#J403 SWIX All Share Shareholder Weighted (SWIX) Index Series
-#JN43 SWIX All Share Net TRI Shareholder Weighted (SWIX) Index Series
-#J141 Capped Shariah Top 40 Shariah Index Series
-#250 Financials and Industrials Specialist Indices Index Series
-#257 Industrials Specialist Indices Index Series
-#J258 Resources Specialist Indices Index Series
-#J253 SA Listed Property Specialist Property Index Series
-#254 Capped Property Specialist Property Index Series
-#255 Property Unit Trust Specialist Property Index Series
-#J#330 Value Style (Value and Growth) Index Series
-#J#331 Growth Style (Value and Growth) Index Series
-#
+s_change_J203 = change_Shares('J203')
+s_change_J200 = change_Shares('J200')
+s_change_J250 = change_Shares('J250')
+s_change_J257 = change_Shares('J257')
+s_change_J258 = change_Shares('J258')
+
+Landing_Shares_Change = s_change_J203.merge(s_change_J200, left_on=['Instrument','Industry'], right_on=['Instrument','Industry'], how = 'left')
+Landing_Shares_Change = Landing_Shares_Change.merge(s_change_J250, left_on=['Instrument','Industry'], right_on=['Instrument','Industry'], how = 'left')
+Landing_Shares_Change = Landing_Shares_Change.merge(s_change_J257, left_on=['Instrument','Industry'], right_on=['Instrument','Industry'], how = 'left')
+Landing_Shares_Change = Landing_Shares_Change.merge(s_change_J258, left_on=['Instrument','Industry'], right_on=['Instrument','Industry'], how = 'left')
+
+Landing_Shares_Change.to_csv('Landing_Page_Shares.csv', index = True)
+
+
+
+
 
 
 
