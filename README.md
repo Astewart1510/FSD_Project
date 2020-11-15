@@ -24,6 +24,7 @@
 	```
 
 # Run Dashboard
+Once packages are installed:
 
 	```bash
 	npm run serve
