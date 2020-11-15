@@ -22,8 +22,8 @@
 	```bash
 	npm install
 	```
- 
-4. Run dashboard:
+
+# Run Dashboard
 
 	```bash
 	npm run serve
