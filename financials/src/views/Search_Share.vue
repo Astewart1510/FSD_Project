@@ -1,4 +1,5 @@
 <template>
+<!-- Search by share page -->
   <div class="main">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1 class="h2">Search by Share Code</h1>
@@ -18,6 +19,7 @@
         </b-col>
 
         <b-col lg="2" class="my-1">
+          <!-- Select start date -->
           <b-form-group >
             <b-form-select v-model="selectedStart" :options="startOptions" @change="filterVarThree = selectedStart" class="mb-3"></b-form-select>
           </b-form-group>
@@ -30,6 +32,7 @@
         </b-col>
 
         <b-col lg="2" class="my-1">
+          <!-- Select end date -->
           <b-form-group >
               <b-form-select v-model="selectedEnd" :options="endOptions" @change="filterVarFour = selectedEnd" class="mb-3"></b-form-select>
           </b-form-group>
@@ -38,24 +41,25 @@
       </b-row>
 
       <div>
-        <b-form-group label="Select the Share Code:" label-cols-md="2">
+        <!-- Select industry -->
+        <b-form-group label="Select the Industry:" label-cols-md="2">
           <b-form-select v-model="selectedIndus" :options="IndusOptions" @change="filterVarOne = selectedIndus" class="mb-3"></b-form-select>
         </b-form-group>
 
       <b-row>
 
 
-
+        <!-- Filter by specific share code -->
         <b-col lg="8" class="my-1">
           <b-form-group
-            label="Filter by code:"
+            label="Filter by Share Code:"
             label-cols-sm="3"
             label-align-sm="left"
-            label-size="sm"
+            label-size="s"
             label-for="filterInput"
             class="mb-0"
           >
-            <b-input-group size="sm">
+            <b-input-group size="s">
               <b-form-input
                 v-model="filterVarTwo"
                 type="search"
@@ -69,7 +73,7 @@
           </b-form-group>
         </b-col>
 
-
+      <!-- Reset all filters -->
       <div v-if="anyfilter == true">
           <b-button variant="danger" @click="resetFiltering">Reset all filters</b-button>
       </div>
@@ -87,16 +91,19 @@
 
       </b-col>
 
+      <!-- Select all rows -->
       <b-col sm="2" md="3" class="my-1">
-          <b-button size="sm" @click="selectAllRows">Select all rows</b-button>
+          <b-button size="s" @click="selectAllRows">Select all rows</b-button>
       </b-col>
 
+      <!-- Clear selected rows -->
       <b-col sm="2" md="3" class="my-1">
-          <b-button size="sm" @click="clearSelected">Clear selected rows</b-button>
+          <b-button size="s" @click="clearSelected">Clear selected rows</b-button>
       </b-col>
 
+      <!-- Reset table sorting to default -->
       <b-col sm="2" md="3" class="my-1">
-         <b-button size="sm" @click="resetSort">Reset table sorting</b-button>
+         <b-button size="s" @click="resetSort">Reset table sorting</b-button>
       </b-col>
 
     </b-row>
@@ -104,9 +111,9 @@
      <br>
 
         <div>
+          <!-- Shares table -->
           <b-table ref="SharesTab" hover head-variant="dark" sticky-header="408px" outlined selectable sort-icon-left @row-selected="onRowSelected" :filter="filter" :filter-function="filterTable" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="ShareBeta" :fields="fields" :busy="isBusy">
-
-
+            <!-- Table loading -->
             <template #table-busy>
               <div class="text-center text-danger my-2">
               <b-spinner class="align-middle"></b-spinner>
@@ -114,6 +121,7 @@
               </div>
             </template>
 
+          <!-- Selection functionality -->
           <template #cell(selected)="{ rowSelected }">
             <template v-if="rowSelected">
               <span aria-hidden="true">&check;</span>
@@ -127,8 +135,6 @@
           </b-table>
         </div>
 
-          <!-- Selected Rows:<br>
-          {{ selected }} -->
       <br>
 
       <b-row>
@@ -136,7 +142,8 @@
 
         </b-col>
         <b-col sm="3" md="3" class="my-1">
-          <div v-if="selected.length && filterVarTwo.length == 3">
+          <!-- Generate or update plot -->
+          <div v-if="selected.length && plotBool == true">
             <b-button lg="4" variant="success" @click="sharePlot">Generate/ update plot</b-button>
           </div>
           <div v-else>
@@ -148,6 +155,7 @@
 
         </b-col>
 
+        <!-- Export selected data as csv -->
         <b-col sm="3" md="3" class="my-1">
           <div v-if="selected.length">
           <download-csv
@@ -166,6 +174,7 @@
       </b-row>
 
       </div>
+      <!-- Plot -->
       <div id='myDiv'></div>
 
   </div>
@@ -173,7 +182,7 @@
 
 <script>
 
-
+//Import libraries used
 import axios from 'axios'
 import Plotly from 'plotly.js-dist';
 
@@ -185,8 +194,9 @@ export default {
 
   methods: {
 
+      // Setup plot for shares
       sharePlot () {
-
+        // Temp variables
         var yi = ''
         var IStemp1 = ''
         var Year_Plot = []
@@ -198,6 +208,7 @@ export default {
 
         IStemp1=this.selected
 
+        // Load data for plots
         for (yi of IStemp1) {
             Year_Plot.push(yi.Year_Month)
             Beta_J200_Plot.push(yi.Beta_J200)
@@ -207,8 +218,6 @@ export default {
             Beta_J258_Plot.push(yi.Beta_J258)
         }
 
-        console.log(Year_Plot)
-
         var trace1 = {
           x: Year_Plot,
           y: Beta_J200_Plot,
@@ -216,7 +225,6 @@ export default {
           type: 'scatter'
         };
 
-        console.log(Beta_J203_Plot)
         var trace2 = {
           x: Year_Plot,
           y: Beta_J203_Plot,
@@ -280,32 +288,36 @@ export default {
         Plotly.newPlot('myDiv', data, layout);
       },
 
+      // Select row
       onRowSelected(items) {
         this.selected = items
       },
 
+      // Reset table sorting to default
       resetSort() {
         this.sortBy = "Year_Month"
         this.sortDesc = false
       },
 
+      // Clear selected rows
       clearSelected() {
 
           this.$refs.SharesTab.clearSelected()
 
       },
 
+      // Select all rows
       selectAllRows() {
 
           this.$refs.SharesTab.selectAllRows()
 
       },
 
+    // Custom filtering functionality
     filterTable: function(tableRow, filter){
 
 
         if (filter[0] !== null && filter[1] !== null && filter[2] !== null && filter[3] !== null){
-            //all filters set
             return tableRow.Industry == filter[0] && tableRow.Instrument == filter[1] && (tableRow.Year_Month.slice(0,4) >= filter[2] && tableRow.Year_Month.slice(0,4) <= filter[3]);
          }
         else if (filter[0] !== null && filter[1] !== null && filter[2] == null && filter[3] !== null) {
@@ -342,6 +354,7 @@ export default {
 
       },
 
+    //  Export CSV
       exported(event) {
         console.log(event)
         this.isExported = true
@@ -350,6 +363,7 @@ export default {
         }, 3 * 1000)
       },
 
+      // reset all table filters to default
       resetFiltering () {
         this.selectedIndus = null
         this.selectedStart = null
@@ -368,24 +382,24 @@ export default {
 
   data() {
       return {
-        isBusy: true,
-        ShareBeta: [],
-        selected: [],
-        sortBy: 'Year_Month',
+        isBusy: true, //Table loading
+        ShareBeta: [], //Table data
+        selected: [], //Selected data
+        sortBy: 'Year_Month', //Sort
         sortDesc: false,
-        filterVarOne: null,
-        filterVarTwo: null,
-        filterVarThree: null,
-        filterVarFour: null,
-        dataFile: 'Shares_Betas.csv',
-        isExported: false,
-        anyfilter: false,
-        tempPlot: true,
-        tempVar: '',
+        filterVarOne: null, //Selected industry
+        filterVarTwo: '', //Share code
+        filterVarThree: null, //Start date
+        filterVarFour: null, //End date
+        dataFile: 'Shares_Betas.csv', //CSV file name
+        isExported: false, //CSV download
+        anyfilter: false, //Reset if any filters
+        plotBool: false, //Plot boolean
 
+        // Select industry options
         selectedIndus: null,
         IndusOptions: [
-          { value: null, text: 'Please select the industry' },
+          { value: null, text: 'Please select the relevant industry' },
           { value: 'Basic Materials', text: 'Basic Materials' },
           { value: 'Consumer Goods', text: 'Consumer Goods' },
           { value: 'Consumer Services', text: 'Consumer Services' },
@@ -398,6 +412,7 @@ export default {
           { value: 'Utilities', text: 'Utilities' },
         ],
 
+        // Select start date
         selectedStart: null,
         startOptions: [
           { value: null, text: 'Select year' },
@@ -408,6 +423,7 @@ export default {
 
         ],
 
+        // Select end date
         selectedEnd: null,
         endOptions: [
           { value: null, text: 'Select year' },
@@ -417,6 +433,7 @@ export default {
           { value: "2020", text: '2020' },
         ],
 
+        //Table field names
         fields: [{key: 'Instrument', sortable: true, label:'Code'},
         {key: 'Start_Date', sortable: true},
         {key: 'End_Date', sortable: true},
@@ -431,13 +448,6 @@ export default {
         {key: 'Industry', sortable: true},
         'selected'],
 
-        selectedPlot: null,
-        PlotOptions: [
-          { value: null, text: 'Select plot'},
-          { value: 'Create plot', text: 'Create plot'},
-
-        ],
-
       }
 
 
@@ -445,10 +455,10 @@ export default {
 
     async mounted () {
 
+      // Load data
       axios.get("https://financials.azurewebsites.net/api/Shares_Beta_Data/FetchAll")
           .then(response => {
               this.ShareBeta = response.data
-              console.log(response.data)
               this.isBusy = false
           })
         .catch(function (error) {
@@ -459,10 +469,18 @@ export default {
 
 
     computed: {
+      // Custom filtering
       filter: function() {
 
         if (this.filterVarTwo == '') {
           this.filterVarTwo =  null
+          this.plotBool = false
+        }
+
+        if (this.filterVarTwo !== null) {
+          if (this.filterVarTwo.length == 3) {
+            this.plotBool = true
+          }
         }
 
           if (this.filterVarOne === null && this.filterVarTwo ===  null && this.filterVarThree ===  null && this.filterVarFour ===  null){

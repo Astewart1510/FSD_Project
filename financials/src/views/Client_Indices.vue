@@ -1,4 +1,5 @@
 <template>
+<!-- This is the page for the Client Indicies -->
   <div class="main">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1 class="h2">Client portfolio statistics</h1>
@@ -17,13 +18,15 @@
         </p>
       </b-col>
 
-
+        <!-- The user can select from five proxies, specified in the data section -->
         <b-form-group>
           <b-form-select v-model="selectedJSE" :options="JSEoptions" @change="updatePlot()" class="mb-3"></b-form-select>
         </b-form-group>
 </b-row>
  <b-row>
 
+      <!-- The filtering functionality for this page, the user can filter through the entire table -->
+      <!-- or select a specific column to filter on -->
       <b-col lg="6" class="my-1">
         <b-form-group
           label="Filter:"
@@ -55,6 +58,7 @@
           label-size="sm"
           description="Leave all unchecked to filter on all data"
           class="mb-0">
+          <!-- Filter on specific columns -->
           <b-form-checkbox-group v-model="filterOn" class="mt-1">
             <b-form-checkbox  value="Index_Code">Index Code</b-form-checkbox>
             <b-form-checkbox value="Year_Month">Year Month</b-form-checkbox>
@@ -70,14 +74,17 @@
 
       </b-col>
 
+      <!-- Calls a method to select all rows before (or after) filtering -->
       <b-col sm="2" md="3" class="my-1">
           <b-button size="sm" @click="selectAllRows">Select all rows</b-button>
       </b-col>
 
+      <!-- Calls a method to deselect all rows selected -->
       <b-col sm="2" md="3" class="my-1">
           <b-button size="sm" @click="clearSelected">Clear selected rows</b-button>
       </b-col>
-
+      
+      <!-- Resets the table storting to default -->
       <b-col sm="2" md="3" class="my-1">
          <b-button size="sm" @click="resetSort">Reset table sorting</b-button>
       </b-col>
@@ -86,14 +93,17 @@
      <br>
 
         <div v-if="selectedJSE == 'J200'">
+          <!-- Table for client indicies specific to J200-->
           <b-table ref="J200Tab" hover head-variant="dark" sticky-header="408px" outlined selectable sort-icon-left @row-selected="onRowSelected"  :filter="filter" :filter-included-fields="filterOn"  :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="J200" :fields="fields" :busy="isBusy">
+            <!-- Display loading animation while waiting for the data -->
             <template #table-busy>
               <div class="text-center text-danger my-2">
               <b-spinner class="align-middle"></b-spinner>
               <strong> Loading...</strong>
               </div>
             </template>
-
+          
+          <!-- Row selection -->
           <template #cell(selected)="{ rowSelected }">
             <template v-if="rowSelected">
               <span aria-hidden="true">&check;</span>
@@ -108,7 +118,9 @@
         </div>
 
         <div v-if="selectedJSE == 'J203'">
+          <!-- Table for client indicies specific to J203-->
           <b-table ref="J203Tab" hover head-variant="dark" sticky-header="405px" outlined selectable sort-icon-left @row-selected="onRowSelected" :filter="filter" :filter-included-fields="filterOn"  :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="J203" :fields="fields" :busy="isBusy">
+          <!-- Row selection -->
           <template #cell(selected)="{ rowSelected }">
             <template v-if="rowSelected">
               <span aria-hidden="true">&check;</span>
@@ -123,7 +135,9 @@
         </div>
 
         <div v-if="selectedJSE == 'J250'">
+          <!-- Table for client indicies specific to J250-->
           <b-table ref="J250Tab" hover head-variant="dark" sticky-header="405px" outlined selectable sort-icon-left @row-selected="onRowSelected" :filter="filter" :filter-included-fields="filterOn"  :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="J250" :fields="fields" :busy="isBusy">
+          <!-- Row selection -->
           <template #cell(selected)="{ rowSelected }">
             <template v-if="rowSelected">
               <span aria-hidden="true">&check;</span>
@@ -138,7 +152,9 @@
         </div>
 
         <div v-if="selectedJSE == 'J257'">
+          <!-- Table for client indicies specific to J257-->
           <b-table ref="J257Tab" hover head-variant="dark" sticky-header="405px" outlined selectable sort-icon-left @row-selected="onRowSelected" :filter="filter" :filter-included-fields="filterOn"  :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="J257" :fields="fields" :busy="isBusy">
+          <!-- Row selection -->
           <template #cell(selected)="{ rowSelected }">
             <template v-if="rowSelected">
               <span aria-hidden="true">&check;</span>
@@ -153,7 +169,9 @@
         </div>
 
         <div v-if="selectedJSE == 'J258'">
+          <!-- Table for client indicies specific to J258-->
           <b-table ref="J258Tab" hover head-variant="dark" sticky-header="405px" outlined selectable sort-icon-left @row-selected="onRowSelected" :filter="filter" :filter-included-fields="filterOn"  :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" :items="J258" :fields="fields" :busy="isBusy">
+          <!-- Row selection -->
           <template #cell(selected)="{ rowSelected }">
             <template v-if="rowSelected">
               <span aria-hidden="true">&check;</span>
@@ -167,6 +185,7 @@
           </b-table>
         </div>
 
+      <!-- Download button is only displayed once a row (or multiple rows) is selected -->
       <div v-if="selected.length">
         <download-csv
                 :data="selected"
@@ -182,7 +201,7 @@
 
       <br>
 
-
+        <!-- Hides div while data is loading -->
         <div v-if="isBusy == false" class="border-top">
 
         <br>
@@ -192,14 +211,17 @@
 
           </div>
 
+          <!-- Select the index required for the plot, indicies defined under data section -->
           <div class="col-md-3">
             <b-form-select v-model="selectedIndex" :options="IndexOptions" size="sm" class="mt-3" v-on:change="getSelectedItem"></b-form-select>
           </div>
 
+          <!-- Select the type of plot, plots defined under data section -->
           <div class="col-md-3">
             <b-form-select v-model="selectedPlot" :options="PlotOptions" size="sm" class="mt-3" v-on:change="getSelectedItem"></b-form-select>
           </div>
 
+        <!-- Only display if an index is selected -->
         </b-row>
            <div v-if="selectedIndex !== null" id='myDiv'></div>
         </div>
@@ -211,6 +233,7 @@
 
 <script>
 
+// Import libraries
 import axios from 'axios'
 import Plotly from 'plotly.js-dist';
 
@@ -222,22 +245,25 @@ export default {
 
   methods: {
 
+      //Update the plot if the selected index is changed (e.g. J200 to J203)
       updatePlot () {
         if (this.selectedIndex !== null) {
-          console.log("WORKING??")
           this.getSelectedItem()
         }
       },
 
+      //Select row
       onRowSelected(items) {
         this.selected = items
       },
 
+      //Reset table sorting to defualt
       resetSort() {
         this.sortBy = "Index_Code"
         this.sortDesc = false
       },
 
+      //Clear selected rows
       clearSelected() {
         if (this.selectedJSE == 'J200') {
           this.$refs.J200Tab.clearSelected()
@@ -252,8 +278,8 @@ export default {
         }
       },
 
+      //Select all rows (before or after filtering)
       selectAllRows() {
-
         if (this.selectedJSE == 'J200') {
           this.$refs.J200Tab.selectAllRows()
         } else if (this.selectedJSE == 'J203') {
@@ -268,13 +294,13 @@ export default {
       },
 
 
-
-       getSelectedItem() { // Just a regular js function that takes 1 arg
-
+        //This method is used to create the plots for the different indicies
+       getSelectedItem() { 
         var x = 0
         var yi = ''
         var IStemp1 = ''
 
+        //Select the data for the specific plot required
         if (this.selectedJSE == 'J200') {
           IStemp1 = this.J200
         } else if (this.selectedJSE == 'J203') {
@@ -287,6 +313,7 @@ export default {
           IStemp1 = this.J258
         }
 
+        //Variables used in plot creation
         var Index_Code = []
         var Industry = []
         var Weight =[]
@@ -294,6 +321,7 @@ export default {
         var pfSysVol = []
         var pfSpecVar = []
 
+          //Load data for plot cration
           for (yi of IStemp1) {
 
             Index_Code.push(yi.Index_Code)
@@ -306,7 +334,7 @@ export default {
           }
 
 
-
+        //Could be improved, currently shifts the index to create plots
         if (this.selectedIndex == "ALSI") {
           x = 0
         } else if (this.selectedIndex == "ALTI") {
@@ -333,6 +361,7 @@ export default {
           x = 1320
         }
 
+        //Setup for the Weight plot
         var trace1 = {
           x: ['2017-Q3', '2017-Q4', '2018-Q1','2018-Q2', '2018-Q3', '2018-Q4','2019-Q1', '2019-Q2', '2019-Q3','2019-Q4', '2020-Q1', '2020-Q2'],
           y: [Weight[0+x], Weight[10+x], Weight[20+x],Weight[30+x], Weight[40+x], Weight[50+x],Weight[60+x], Weight[70+x], Weight[80+x],Weight[90+x], Weight[100+x], Weight[110+x]],
@@ -403,8 +432,10 @@ export default {
           type: 'bar'
         };
 
+        //Weight plot data
         var data = [trace1, trace2, trace3, trace4, trace5, trace6, trace7, trace8, trace9, trace10];
-
+        
+        //Weight plot layout
         var layout1 = {
           title: {
             text:this.selectedIndex + ' Weight for ' +this.selectedJSE,
@@ -439,6 +470,7 @@ export default {
 
         /////////////
 
+        //Setup for the pfBeta plot
         var trace1_2 = {
           x: ['2017-Q3', '2017-Q4', '2018-Q1','2018-Q2', '2018-Q3', '2018-Q4','2019-Q1', '2019-Q2', '2019-Q3','2019-Q4', '2020-Q1', '2020-Q2'],
           y: [pfBeta[0+x], pfBeta[10+x], pfBeta[20+x],pfBeta[30+x], pfBeta[40+x], pfBeta[50+x],pfBeta[60+x], pfBeta[70+x], pfBeta[80+x],pfBeta[90+x], pfBeta[100+x], pfBeta[110+x]],
@@ -509,8 +541,10 @@ export default {
           type: 'bar'
         };
 
+        //pfBeta plot data
         var data_2 = [trace1_2, trace2_2, trace3_2, trace4_2, trace5_2, trace6_2, trace7_2, trace8_2, trace9_2, trace10_2];
 
+        //pfBeta plot layout
         var layout2 = {
           title: {
             text:this.selectedIndex + ' Portfolio Beta for ' +this.selectedJSE,
@@ -544,6 +578,7 @@ export default {
           };
         ////////////////////////////
 
+        //pfSysVol plot setup
         var trace1_3 = {
           x: ['2017-Q3', '2017-Q4', '2018-Q1','2018-Q2', '2018-Q3', '2018-Q4','2019-Q1', '2019-Q2', '2019-Q3','2019-Q4', '2020-Q1', '2020-Q2'],
           y: [pfSysVol[0+x], pfSysVol[10+x], pfSysVol[20+x],pfSysVol[30+x], pfSysVol[40+x], pfSysVol[50+x],pfSysVol[60+x], pfSysVol[70+x], pfSysVol[80+x],pfSysVol[90+x], pfSysVol[100+x], pfSysVol[110+x]],
@@ -614,8 +649,10 @@ export default {
           type: 'bar'
         };
 
+        //pfSysVol plot data
         var data_3 = [trace1_3, trace2_3, trace3_3, trace4_3, trace5_3, trace6_3, trace7_3, trace8_3, trace9_3, trace10_3];
-
+        
+        //pfSysVol plot layout
         var layout3 = {
           title: {
             text: this.selectedIndex + ' Portfolio Systematic Volatility for ' +this.selectedJSE,
@@ -648,6 +685,8 @@ export default {
           height: 550,
           };
         /////////////////////
+
+        // pfSpecVar plot setup
          var trace1_4 = {
           x: ['2017-Q3', '2017-Q4', '2018-Q1','2018-Q2', '2018-Q3', '2018-Q4','2019-Q1', '2019-Q2', '2019-Q3','2019-Q4', '2020-Q1', '2020-Q2'],
           y: [pfSpecVar[0+x], pfSpecVar[10+x], pfSpecVar[20+x],pfSpecVar[30+x], pfSpecVar[40+x], pfSpecVar[50+x],pfSpecVar[60+x], pfSpecVar[70+x], pfSpecVar[80+x],pfSpecVar[90+x], pfSpecVar[100+x], pfSpecVar[110+x]],
@@ -718,7 +757,10 @@ export default {
           type: 'bar'
         };
 
+        // pfSpecVar plot data
         var data_4 = [trace1_4, trace2_4, trace3_4, trace4_4, trace5_4, trace6_4, trace7_4, trace8_4, trace9_4, trace10_4];
+        
+        // pfSpecVar plot layout
         var layout4 = {
           title: {
             text:this.selectedIndex + ' Portfolio Specific Variance for ' +this.selectedJSE,
@@ -751,11 +793,8 @@ export default {
           height: 550,
           };
 
-        // console.log(data_3)
-
+        //Display plot based on user selected Plot
         if (this.selectedPlot == 'Weight') {
-          //console.log("PLOT DATA")
-          //console.log(data)
           Plotly.newPlot('myDiv', data,layout1);
         } else if (this.selectedPlot == 'Beta') {
           Plotly.newPlot('myDiv', data_2,layout2);
@@ -768,6 +807,7 @@ export default {
 
       },
 
+      //export events
       exported(event) {
         console.log(event)
         this.isExported = true
@@ -783,22 +823,21 @@ export default {
 
   data() {
       return {
-        isBusy: true,
-        J200: [],
-        J203: [],
-        J250: [],
-        J257: [],
-        J258: [],
-        selected: [],
-        sortBy: 'Index_Code',
-        sortDesc: false,
-        filter: null,
-        filterOn: [],
-        JSEOption: 'J200',
-        dataFile: 'Client_Indicies.csv',
-        isExported: false,
+        isBusy: true, //Table loading
+        J200: [], //J200 Data
+        J203: [], //J203 Data
+        J250: [], //J250 Data
+        J257: [], //J257 Data
+        J258: [], //J258 Data
+        selected: [], //Table selection
+        sortBy: 'Index_Code', //Defult sorting
+        sortDesc: false, 
+        filter: null, //filter variable
+        filterOn: [], //Filter on specific variable
+        dataFile: 'Client_Indicies.csv', //Data file name
+        isExported: false, //Download csv
 
-
+        //Index options
         selectedIndex: null,
         IndexOptions: [
           { value: null, text: 'Please select the index' },
@@ -816,6 +855,8 @@ export default {
           { value: 'TOPI', text: 'Top 40 Index (TOPI)' },
 
         ],
+
+        //JSE options
         selectedJSE: 'J200',
         JSEoptions: [
           { value: 'J200', text: 'Top 40 (J200)'},
@@ -824,6 +865,8 @@ export default {
           { value: 'J257', text: 'Industrials (J257)' },
           { value: 'J258', text: 'Resources (J258)' },
         ],
+
+        // Plot options
         selectedPlot: 'Weight',
         PlotOptions: [
           { value: 'Weight', text: 'Weight Decomposition'},
@@ -832,25 +875,7 @@ export default {
           { value: 'Specvar', text: 'Specific Variance Decomposition' },
         ],
 
-        selectedStart: null,
-        startOptions: [
-          { value: null, text: 'Select year' },
-          { value: "2017", text: '2017' },
-          { value: "2018", text: '2018' },
-          { value: "2019", text: '2019' },
-          { value: "2020", text: '2020' },
-
-        ],
-
-        selectedEnd: null,
-        endOptions: [
-          { value: null, text: 'Select year' },
-          { value: "2017", text: '2017' },
-          { value: "2018", text: '2018' },
-          { value: "2019", text: '2019' },
-          { value: "2020", text: '2020' },
-        ],
-
+        // Table columns
         fields: [{key: 'Index_Code', sortable: true},
         {key: 'Year_Month', sortable: true},
         {key: 'Industry', sortable: true},
@@ -866,7 +891,8 @@ export default {
     },
 
     async mounted () {
-
+      
+      //Import J200 data
       axios.get("http://financials.azurewebsites.net/api/J200/FetchAll")
           .then(response => {
               this.J200 = response.data
@@ -877,6 +903,7 @@ export default {
               console.log(error);
       });
 
+      //Import J203 data
       axios.get("http://financials.azurewebsites.net/api/J203/FetchAll")
           .then(response => {
               this.J203 = response.data
@@ -885,6 +912,7 @@ export default {
               console.log(error);
       });
 
+      //Import J250 data
       axios.get("http://financials.azurewebsites.net/api/J250/FetchAll")
           .then(response => {
               this.J250 = response.data
@@ -893,6 +921,7 @@ export default {
               console.log(error);
       });
 
+      //Import J257 data
       axios.get("http://financials.azurewebsites.net/api/J257/FetchAll")
           .then(response => {
               this.J257 = response.data
@@ -901,6 +930,7 @@ export default {
               console.log(error);
       });
 
+      // Import J258 data
       axios.get("http://financials.azurewebsites.net/api/J258/FetchAll")
           .then(response => {
               this.J258 = response.data

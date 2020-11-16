@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
+// The different views are created on this page
 const routes = [
   {
     path: '/',

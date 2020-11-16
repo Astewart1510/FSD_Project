@@ -1,4 +1,5 @@
 <template>
+<!-- This is the home page of the dashboard -->
 <div class="main">
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 id="welcome" class="h2">Welcome to the ERS Report</h1>
@@ -20,12 +21,21 @@
   <hr />
   <h4>Indices with largest change (Δ) in Beta</h4>
   <br>
-  <b-table hover head-variant="dark" sticky-header="408px" outlined sort-icon-left :sort-by.sync="sortBy1" :sort-desc.sync="sortDesc1" :items="deltaBeta" :fields="fieldsTab1" :busy="isBusy1"></b-table>
+  <!-- First table-->
+  <b-table hover head-variant="dark" sticky-header="408px" outlined sort-icon-left :sort-by.sync="sortBy1" :sort-desc.sync="sortDesc1" :items="deltaBeta" :fields="fieldsTab1" :busy="isBusy1">
+    <!-- Display loading animation while waiting for the data -->
+    <template #table-busy>
+              <div class="text-center text-danger my-2">
+              <b-spinner class="align-middle"></b-spinner>
+              <strong> Loading...</strong>
+              </div>
+    </template>
+  </b-table>
   <b-row>
     <b-col sm="3" md="9" class="my-1">
 
     </b-col>
-
+    <!-- Code to download CSV files, used four each table -->
     <b-col sm="3" md="3" class="my-1">
       <download-csv :data="JSON.parse(JSON.stringify(deltaBeta))" :fields="['Code','Name','J200','J203','J250','J257','J258']" :labels="{ J200:'Δ J200', J203:'Δ J203', J250:'Δ J250', J257:'Δ J257', J258:'Δ J258'}" :name="dataFile1"
         v-on:export-finished="exported">
@@ -35,7 +45,16 @@
   </b-row>
   <h4>Indices with largest percent change (% Δ) in Beta</h4>
   <br>
-  <b-table hover head-variant="dark" sticky-header="408px" outlined sort-icon-left :sort-by.sync="sortBy2" :sort-desc.sync="sortDesc2" :items="deltaBeta" :fields="fieldsTab2" :busy="isBusy2"></b-table>
+  <!-- Second table-->
+  <b-table hover head-variant="dark" sticky-header="408px" outlined sort-icon-left :sort-by.sync="sortBy2" :sort-desc.sync="sortDesc2" :items="deltaBeta" :fields="fieldsTab2" :busy="isBusy2">
+    <!-- Display loading animation while waiting for the data -->
+    <template #table-busy>
+              <div class="text-center text-danger my-2">
+              <b-spinner class="align-middle"></b-spinner>
+              <strong> Loading...</strong>
+              </div>
+    </template>
+  </b-table>
   <b-row>
     <b-col sm="3" md="9" class="my-1">
 
@@ -53,7 +72,16 @@
   <div ></div>
   <h4>Shares with largest change (Δ) in Beta</h4>
   <br>
-  <b-table hover head-variant="dark" sticky-header="408px" outlined sort-icon-left :sort-by.sync="sortBy1" :sort-desc.sync="sortDesc1" :items="deltaShare" :fields="fieldsTab3" :busy="isBusy3"></b-table>
+  <!-- Third table-->
+  <b-table hover head-variant="dark" sticky-header="408px" outlined sort-icon-left :sort-by.sync="sortBy1" :sort-desc.sync="sortDesc1" :items="deltaShare" :fields="fieldsTab3" :busy="isBusy3">
+    <!-- Display loading animation while waiting for the data -->
+    <template #table-busy>
+              <div class="text-center text-danger my-2">
+              <b-spinner class="align-middle"></b-spinner>
+              <strong> Loading...</strong>
+              </div>
+    </template>
+  </b-table>
   <b-row>
     <b-col sm="3" md="9" class="my-1">
     </b-col>
@@ -66,7 +94,16 @@
   </b-row>
   <h4>Shares with largest percent change (% Δ) in Beta</h4>
   <br>
-  <b-table hover head-variant="dark" sticky-header="408px" outlined sort-icon-left :sort-by.sync="sortBy2" :sort-desc.sync="sortDesc2" :items="deltaShare" :fields="fieldsTab4" :busy="isBusy4"></b-table>
+  <!-- Fourth table-->
+  <b-table hover head-variant="dark" sticky-header="408px" outlined sort-icon-left :sort-by.sync="sortBy2" :sort-desc.sync="sortDesc2" :items="deltaShare" :fields="fieldsTab4" :busy="isBusy4">
+    <!-- Display loading animation while waiting for the data -->
+    <template #table-busy>
+              <div class="text-center text-danger my-2">
+              <b-spinner class="align-middle"></b-spinner>
+              <strong> Loading...</strong>
+              </div>
+    </template>
+  </b-table>
   <b-row>
     <b-col sm="3" md="9" class="my-1">
 
@@ -84,6 +121,7 @@
 </template>
 
 <script>
+// Import libraries
 import axios from 'axios'
 
 export default {
@@ -94,6 +132,7 @@ export default {
 
   methods: {
 
+    //Method used for downloading csv files
     exported(event) {
       console.log(event)
       this.isExported = true
@@ -106,23 +145,24 @@ export default {
 
   data() {
     return {
-      deltaBeta: [],
-      deltaShare: [],
-      isBusy1: true,
-      isBusy2: true,
-      isBusy3: true,
-      isBusy4: true,
-      sortBy1: "J200",
+      deltaBeta: [], //Change in Beta for indicies
+      deltaShare: [], //Change in Beta for shares
+      isBusy1: true, //Table loading
+      isBusy2: true, //Table loading
+      isBusy3: true, //Table loading
+      isBusy4: true, //Table loading
+      sortBy1: "J200", //Sort
       sortDesc1: true,
-      sortBy2: "J200_1",
+      sortBy2: "J200_1",  //Sort
       sortDesc2: true,
+      //File names for the four tables
       dataFile1: 'Delta_Beta_Ind.csv',
       dataFile2: 'Delta_Beta_Ind_Perc.csv',
       dataFile3: 'Delta_Beta_Share.csv',
       dataFile4: 'Delta_Beta_Share_Perc.csv',
-      isExported: false,
+      isExported: false, 
 
-
+      //Fields for Table 1
       fieldsTab1: [{
           key: 'Code',
           sortable: true
@@ -162,6 +202,7 @@ export default {
         },
       ],
 
+      //Fields for Table 2
       fieldsTab2: [{
           key: 'Code',
           sortable: true,
@@ -202,6 +243,7 @@ export default {
         },
       ],
 
+      //Fields for Table 3
       fieldsTab3: [{
           key: 'Code',
           sortable: true,
@@ -238,6 +280,7 @@ export default {
         },
       ],
 
+      //Fields for Table 4
       fieldsTab4: [{
           key: 'Code',
           sortable: true,
@@ -279,7 +322,7 @@ export default {
   },
 
   async mounted() {
-
+    //Read data for Table 1 and 2
     axios.get("https://financials.azurewebsites.net/api/Landing_Page_Indices/FetchAll")
       .then(response => {
         this.deltaBeta = response.data
@@ -290,6 +333,7 @@ export default {
         console.log(error);
       });
 
+    //Read data for Table 3 and 4
     axios.get("https://financials.azurewebsites.net/api/Landing_Page_Shares/FetchAll")
       .then(response => {
         this.deltaShare = response.data

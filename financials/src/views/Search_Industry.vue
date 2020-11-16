@@ -1,4 +1,5 @@
 <template>
+<!-- Search by industry page -->
 <div class="main">
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Search by Index Code</h1>
@@ -20,6 +21,7 @@
     </b-col>
 
     <b-col lg="2" class="my-1">
+      <!-- Filter from year -->
       <b-form-group >
         <b-form-select v-model="selectedStart" :options="startOptions" @change="filterVarThree = selectedStart" class="mb-3"></b-form-select>
       </b-form-group>
@@ -32,6 +34,7 @@
     </b-col>
 
     <b-col lg="2" class="my-1">
+      <!-- Filter to year -->
       <b-form-group>
         <b-form-select v-model="selectedEnd" :options="endOptions" @change="filterVarFour = selectedEnd" class="mb-3"></b-form-select>
       </b-form-group>
@@ -41,8 +44,8 @@
 
   <div>
 
-
-    <b-form-group label="Select the industry series:" label-cols-md="2">
+    <!-- Select the required industry, indistries defined in data -->
+    <b-form-group label="Select the Index Series:" label-cols-md="2">
       <b-form-select v-model="selectedIndus" :options="IndusOptions" @change="filterVarOne = selectedIndus" class="mb-3"></b-form-select>
     </b-form-group>
 
@@ -51,8 +54,9 @@
 
 
       <b-col lg="8" class="my-1">
-        <b-form-group label="Filter by Code:" label-cols-sm="3" label-align-sm="left" label-size="sm" label-for="filterInput" class="mb-0">
-          <b-input-group size="sm">
+        <!-- Filter by specific code -->
+        <b-form-group label="Filter by Index Code:" label-cols-sm="3" label-align-sm="left" label-size="s" label-for="filterInput" class="mb-0">
+          <b-input-group size="s">
             <b-form-input v-model="filterVarTwo" type="search" id="filterInput" placeholder="Type to search..."></b-form-input>
             <b-input-group-append>
               <b-button :disabled="!filterVarTwo" @click="filterVarTwo = ''">Clear</b-button>
@@ -61,11 +65,12 @@
         </b-form-group>
       </b-col>
 
-      <div v-if="anyfilter == true">
-        <b-button variant="danger" @click="resetFiltering">Reset all filters</b-button>
+      <!-- Reset any filters applied -->
+      <div id="reset-button" v-if="anyfilter == true">
+        <b-button  variant="danger" @click="resetFiltering">Reset all filters</b-button>
       </div>
       <div v-else>
-        <b-button disabled>Reset all filters</b-button>
+        <b-button  disabled>Reset all filters</b-button>
       </div>
     </b-row>
 
@@ -76,26 +81,29 @@
 
       </b-col>
 
+      <!-- Select all rows -->
       <b-col sm="2" md="3" class="my-1">
-        <b-button size="sm" @click="selectAllRows">Select all rows</b-button>
+        <b-button size="s" @click="selectAllRows">Select all rows</b-button>
       </b-col>
 
+      <!-- CLear selected rows -->
       <b-col sm="2" md="3" class="my-1">
-        <b-button size="sm" @click="clearSelected">Clear selected rows</b-button>
+        <b-button size="s" @click="clearSelected">Clear selected rows</b-button>
       </b-col>
 
+      <!-- Reset table sorting to default -->
       <b-col sm="2" md="3" class="my-1">
-        <b-button size="sm" @click="resetSort">Reset table sorting</b-button>
+        <b-button size="s" @click="resetSort">Reset table sorting</b-button>
       </b-col>
     </b-row>
 
     <br>
 
     <div>
+      <!-- Indice table -->
       <b-table ref="IndiceTab" hover head-variant="dark" sticky-header="408px" outlined selectable sort-icon-left empty-filtered-html @row-selected="onRowSelected" :filter="filter" :filter-function="filterTable" :sort-by.sync="sortBy"
         :sort-desc.sync="sortDesc" :items="ShareBeta" :fields="fields" :busy="isBusy">
-
-
+        <!-- Display loading animation -->
         <template #table-busy>
           <div class="text-center text-danger my-2">
             <b-spinner class="align-middle"></b-spinner>
@@ -103,6 +111,7 @@
           </div>
         </template>
 
+        <!-- Selection functionality -->
         <template #cell(selected)="{ rowSelected }">
           <template v-if="rowSelected">
             <span aria-hidden="true">&check;</span>
@@ -116,13 +125,14 @@
       </b-table>
     </div>
 
-
+<br />
     <b-row>
       <b-col sm="3" md="1" class="my-1">
 
       </b-col>
       <b-col sm="3" md="4" class="my-1">
-        <div v-if="selected.length && filterVarTwo.length == 4">
+        <!-- Generate or update the plot, a code has to be entered for this to work -->
+        <div v-if="selected.length && plotBool == true">
           <b-button lg="4" variant="success" @click="instrumentPlot">Generate/ update plot</b-button>
         </div>
         <div v-else>
@@ -135,6 +145,7 @@
       </b-col>
 
       <b-col sm="3" md="3" class="my-1">
+        <!-- Download csv file -->
         <div v-if="selected.length">
           <download-csv :data="selected" :name="dataFile" v-on:export-finished="exported">
             <b-button variant="success">Download selected rows</b-button>
@@ -149,12 +160,14 @@
 
 
   </div>
+  <!-- Display plot -->
   <div id='myDiv'></div>
 
 </div>
 </template>
 
 <script>
+// Import libraries
 import axios from 'axios'
 import Plotly from 'plotly.js-dist';
 
@@ -166,8 +179,10 @@ export default {
 
   methods: {
 
+    // Plot setup for indices
     instrumentPlot() {
 
+      // Temportary variables
       var yi = ''
       var IStemp1 = ''
       var Year_Plot = []
@@ -179,6 +194,7 @@ export default {
 
       IStemp1 = this.selected
 
+      // Load data
       for (yi of IStemp1) {
         Year_Plot.push(yi.Year_Month)
         Beta_J200_Plot.push(yi.Beta_J200)
@@ -188,8 +204,7 @@ export default {
         Beta_J258_Plot.push(yi.Beta_J258)
       }
 
-      console.log(Year_Plot)
-
+      // Plot setup
       var trace1 = {
         x: Year_Plot,
         y: Beta_J200_Plot,
@@ -197,7 +212,6 @@ export default {
         type: 'scatter'
       };
 
-      console.log(Beta_J203_Plot)
       var trace2 = {
         x: Year_Plot,
         y: Beta_J203_Plot,
@@ -226,8 +240,10 @@ export default {
         type: 'scatter'
       };
 
+      // Plot data
       var data = [trace1, trace2, trace3, trace4, trace5];
 
+      // Plot layout
       var layout = {
         title: {
           text: 'Beta values for ' + this.filterVarTwo + ' from ' + Year_Plot[0] + ' to ' + Year_Plot[Year_Plot.length - 1],
@@ -261,31 +277,35 @@ export default {
       Plotly.newPlot('myDiv', data, layout);
     },
 
+    // Select rows
     onRowSelected(items) {
       this.selected = items
     },
 
+    // Reset table sorting to detault
     resetSort() {
       this.sortBy = "Year_Month"
       this.sortDesc = false
     },
 
+    // Clear selected rows
     clearSelected() {
 
       this.$refs.IndiceTab.clearSelected()
 
     },
 
+    // Select all rows
     selectAllRows() {
 
       this.$refs.IndiceTab.selectAllRows()
 
     },
 
+    // Custom filtering functionality
     filterTable: function(tableRow, filter) {
 
       if (filter[0] !== null && filter[1] !== null && filter[2] !== null && filter[3] !== null) {
-        //all filters set
         return tableRow.Series == filter[0] && tableRow.Instrument == filter[1] && (tableRow.Year_Month.slice(0, 4) >= filter[2] && tableRow.Year_Month.slice(0, 4) <= filter[3]);
       } else if (filter[0] !== null && filter[1] !== null && filter[2] == null && filter[3] !== null) {
         return tableRow.Series == filter[0] && tableRow.Instrument == filter[1] && tableRow.Year_Month.slice(0, 4) <= filter[3];
@@ -320,6 +340,7 @@ export default {
 
     },
 
+    // Export csv
     exported(event) {
       console.log(event)
       this.isExported = true
@@ -328,6 +349,7 @@ export default {
       }, 3 * 1000)
     },
 
+    //Reset all table filters
     resetFiltering() {
       this.selectedIndus = null;
       this.selectedStart = null;
@@ -346,24 +368,25 @@ export default {
 
   data() {
     return {
-      isBusy: true,
-      ShareBeta: [],
-      selected: [],
-      sortBy: 'Year_Month',
+      isBusy: true, //Loading data
+      ShareBeta: [], //Table data
+      selected: [], //Selected rows
+      sortBy: 'Year_Month', //sort
       sortDesc: false,
-      filterVarOne: null,
-      filterVarTwo: null,
-      filterVarThree: null,
-      filterVarFour: null,
-      dataFile: 'Indice_Beta.csv',
-      isExported: false,
-      anyfilter: false,
-      testvar: true,
+      filterVarOne: null, //Filter by industry
+      filterVarTwo: null, //Filter by code
+      filterVarThree: null, //Start date
+      filterVarFour: null, //End date
+      dataFile: 'Indice_Beta.csv', //CSV file name
+      isExported: false, //export csv
+      anyfilter: false, //reset filters
+      plotBool: false, //Plot boolean
 
+      // Industry select options
       selectedIndus: null,
       IndusOptions: [{
           value: null,
-          text: 'Please select the industry series'
+          text: 'Please select the relevant Index Series'
         },
         {
           value: 'All Africa Index Series',
@@ -443,6 +466,7 @@ export default {
         },
       ],
 
+      // Select start year
       selectedStart: null,
       startOptions: [{
           value: null,
@@ -467,6 +491,7 @@ export default {
 
       ],
 
+      //Select end year
       selectedEnd: null,
       endOptions: [{
           value: null,
@@ -490,6 +515,7 @@ export default {
         },
       ],
 
+      // Table fields
       fields: [{
           key: 'Instrument',
           sortable: true,
@@ -540,11 +566,10 @@ export default {
   },
 
   async mounted() {
-
+    // Load table data
     axios.get("https://financials.azurewebsites.net/api/Indice_Beta_Data/FetchAll")
       .then(response => {
         this.ShareBeta = response.data
-        //console.log(response.data)
         this.isBusy = false
       })
       .catch(function(error) {
@@ -554,12 +579,20 @@ export default {
   },
 
   computed: {
+
+    // Custom filter function
     filter: function() {
 
       if (this.filterVarTwo == '') {
         this.filterVarTwo = null
-
+        this.plotBool = false
       }
+
+      if (this.filterVarTwo !== null) {
+          if (this.filterVarTwo.length == 3) {
+            this.plotBool = true
+          }
+        }
 
       if (this.filterVarOne === null && this.filterVarTwo === null && this.filterVarThree === null && this.filterVarFour === null) {
         this.anyfilter = false;
@@ -579,6 +612,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+
+
 h1 {
   margin: 20px 0 10px;
   color: rgb(0, 0, 0)
