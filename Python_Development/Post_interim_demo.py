@@ -5,17 +5,14 @@ Created on Wed Aug 26 14:09:23 2020
 
 @author: Alex Stewart
 """
+## Instead of executing the script it is advised to load the spydata.
+
 #### Load libraries
 import numpy as np
 import pandas as pd
 import datetime as datetime
 from varname import nameof
 
-
-#### Specificy the indexCode, date and MktIndexCode
-rdate = datetime.datetime(2020,6,22) #enter date here
-indexCode = "RESI"
-mktIndexCode = "J203" # Enter Market code for CAPM model
 
 #### read files
 Industry_Classification_Benchmark = pd.read_csv("FSD_Project/csv_files/Industry_Classification_Benchmark.csv")
@@ -25,10 +22,16 @@ BA_Beta_Output = pd.read_csv("FSD_Project/csv_files/BA_Beta_Output.csv")
 #EOD_Interest_Rate_Data = pd.read_csv("../csv_files/EOD_Interest_Rate_Data.csv")
 #EOD_Equity_Data = pd.read_csv("../csv_files/EOD_Equity_Data.csv")
 
-
 #### convert Date column to datetime format
 Index_Constituents.Date = pd.to_datetime(Index_Constituents.Date)
 BA_Beta_Output.Date = pd.to_datetime(BA_Beta_Output.Date)
+
+
+############ testing for specific indice, date and mktindexcode ############
+#### Specificy the indexCode, date and MktIndexCode
+rdate = datetime.datetime(2020,6,22) #enter date here
+indexCode = "RESI"
+mktIndexCode = "J203" # Enter Market code for CAPM model
 
 #### First Function
 ##intialise
@@ -139,8 +142,12 @@ pfVol = weights_t*betas*betas_t*weights*(mktVol**2) + weights_t*(S**2)*weights #
 
 CorrMat = D_inverse*(betas*betas_t*mktVol**2 + S**2)*D_inverse #Correlation_Matrix
 
-######################################      aggregate over all the information for function one 
-######## DEFINE FUNCTION 1 ######## 
+############ END testing for specific indice, date and mktindexcode ############
+
+
+############ START aggregate over all the information ############
+
+######## START FUNCTION 1 ######## 
 def GetICsAndWeights(rdate,indexCode):
     if indexCode == 'FLED':
         indexCode_column = 'ALSI New'
@@ -203,7 +210,7 @@ Index_Date_Idustry_Weight = Date_IC_weights_subsector.groupby(["Index Code","Dat
 Date_IC_weights_subsector[(Date_IC_weights_subsector['Date'] == datetime.datetime(2017,9,18)) & (Date_IC_weights_subsector['Index Code'] == 'ALSI')]['Weight'].sum()
 ######## END FUNCTION 1 ######## 
 
-######## DEFINE FUNCTION 2 ######## 
+######## START FUNCTION 2 ######## 
 BA_Beta_Output_New = BA_Beta_Output
 BA_Beta_Output_New['Year_Month'] = BA_Beta_Output_New['Date'].dt.to_period('M')
 BA_Beta_Output_New = BA_Beta_Output_New.drop(columns = ["Date","Start Date","End Date"])
@@ -298,9 +305,9 @@ J258_Industry_Beta_Unique_Risk = J258_Beta_Unique_Risk.groupby(['Year_Month','In
 J258_full_table = Date_IC_weights_subsector_New.merge(J258_Beta_Unique_Risk, left_on=['Year_Month','Instrument','Industry','ICB Sub_sector'], right_on=['Year_Month','Instrument','Industry','ICB Sub_sector'], how = 'left')
 J258_full_table.fillna(0)
 
-####End Function 2
+######## END FUNCTION 2 ######## 
 
-### Function 3
+######## START FUNCTION 3 ######## 
 
 #### build function
 rdates_func3 = pd.DataFrame(rdates)
@@ -315,8 +322,7 @@ Industry_list = ['Basic Materials','Technology','Financials', 'Utilities', 'Tele
 
 #J200_Index_Date_Industry_Weight_pfBeta = Index_Date_Industry_Weight_Func3
 
-
-
+#build function
 def Calc_pf_Beta(rdate, IndexCode, J200_full_table):
     #get mktVol
     MktIndex = nameof(J200_full_table)[0:4]
@@ -571,8 +577,10 @@ awe = J258_Index_Year_Month_Industry_Weight_Beta['Year_Month'].drop_duplicates()
 
 Full_demo.to_csv('Full_demo_updated_SpevVol.csv', index = True)
 
+######## END FUNCTION 3 ######## 
 
-######  Create tables of betas for Shares and for Market Indices #######
+
+###### START Create tables of betas for Shares and for Market Indices #######
 
 BA_Beta_Output_Final = BA_Beta_Output
 BA_Beta_Output_Final['Year_Month'] = BA_Beta_Output_Final['Date'].dt.to_period('M')
@@ -715,7 +723,7 @@ Landing_Indice = pd.read_csv("FSD_Project/csv_files/Landing_page_Indice_Beta.csv
 Landing_Shares = pd.read_csv("FSD_Project/csv_files/Landing_page_Shares_Betas.csv")
 
 ## calculate difference between the two for Indice table
-create function
+#create function
 def change_Indice(Beta):
     value = 'Beta_' + Beta
     name_1 = 'Δ ' + Beta
@@ -759,20 +767,23 @@ def change_Shares(Beta):
     df_tes = df_tes.drop(columns = ['2020-Q2','2020-Q1'])
     return df_tes
 
-
+# apply function to all market proxies
 s_change_J203 = change_Shares('J203')
 s_change_J200 = change_Shares('J200')
 s_change_J250 = change_Shares('J250')
 s_change_J257 = change_Shares('J257')
 s_change_J258 = change_Shares('J258')
 
+#merge all the market proxies into one table
 Landing_Shares_Change = s_change_J203.merge(s_change_J200, left_on=['Instrument','Industry'], right_on=['Instrument','Industry'], how = 'left')
 Landing_Shares_Change = Landing_Shares_Change.merge(s_change_J250, left_on=['Instrument','Industry'], right_on=['Instrument','Industry'], how = 'left')
 Landing_Shares_Change = Landing_Shares_Change.merge(s_change_J257, left_on=['Instrument','Industry'], right_on=['Instrument','Industry'], how = 'left')
 Landing_Shares_Change = Landing_Shares_Change.merge(s_change_J258, left_on=['Instrument','Industry'], right_on=['Instrument','Industry'], how = 'left')
 
+#save as csv
 Landing_Shares_Change.to_csv('Landing_Page_Shares.csv', index = True)
 
+###### END Create tables of betas for Shares and for Market Indices #######
 
 
 

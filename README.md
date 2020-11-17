@@ -13,21 +13,29 @@
 
 2. Move into this `financials` subfolder:
 
-	```bash
+	```
 	cd financials
 	```
 
 3. Install package dependencies:
 
-	```bash
+	```
 	npm install
 	```
 
 # Run Dashboard
-Once packages are installed:
+1. Once packages are installed:
 
+	```
 	npm run serve
-	
+	```
+2. Copy the local host address shown in the terminal into your local browser:
+
+## Quit dashboard
+1. Open the terminal where the dashboard is running:
+
+2. Quit the dashboard by entering "crtl+c" on keyboard.
+
 # Dashboard Instructions
 To navigate the dashboard, select the different pages on the left hand side of the screen. 
 
@@ -60,6 +68,10 @@ This page was to meet the specific requirements of one of AIMFRMs clients.
 A table displays a synthetic construction of the most important risk statistics for a specific index across various industries. The dashboard created is able to display a table for five different market proxies, namely: Top 40 (J200), All Share (J203), Financials and Industrials (J250), Industrials (J257), Resources (J258). The table contains seven variables, the Index, Date, Industry, Weight, Portfolio Beta, Portfolio Systematic Volatility and the Portfolio Specific Variance. Once again the user has the option to download the selected rows as a csv file. The table can also be sorted by the user however they require.
 
 Below the table the user has some options to generate plots. After selecting a relevant index for the selected market proxy the user has the option to create plots using the aforementioned statistics. The plots that can be created are the weight decomposition, the beta decomposition, systematic volatility decomposition and specific variance decomposition. These plots are interactive and update dynamically based on the index the user selects. The user can use the built in plotly tools to only view the entries for specific quarters should it be required. 
+
+### Problems
+
+Please email Alex on stwale002@myuct.ac.za
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
